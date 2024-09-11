@@ -4,406 +4,271 @@
         "Functions": [
             {
                 "Function": "setAddresses",
-                "Modifiers": [
-                    "setAddresses",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "stabilityPool",
-                "Modifiers": [
-                    "stabilityPool",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "lusdToken",
-                "Modifiers": [
-                    "lusdToken",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "lqtyToken",
-                "Modifiers": [
-                    "lqtyToken",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "lqtyStaking",
-                "Modifiers": [
-                    "lqtyStaking",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveOwnersCount",
-                "Modifiers": [
-                    "getTroveOwnersCount",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveFromTroveOwnersArray",
-                "Modifiers": [
-                    "getTroveFromTroveOwnersArray",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getNominalICR",
-                "Modifiers": [
-                    "getNominalICR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getCurrentICR",
-                "Modifiers": [
-                    "getCurrentICR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "liquidate",
-                "Modifiers": [
-                    "liquidate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "liquidateTroves",
-                "Modifiers": [
-                    "liquidateTroves",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "batchLiquidateTroves",
-                "Modifiers": [
-                    "batchLiquidateTroves",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "redeemCollateral",
-                "Modifiers": [
-                    "redeemCollateral",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "updateStakeAndTotalStakes",
-                "Modifiers": [
-                    "updateStakeAndTotalStakes",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "updateTroveRewardSnapshots",
-                "Modifiers": [
-                    "updateTroveRewardSnapshots",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "addTroveOwnerToArray",
-                "Modifiers": [
-                    "addTroveOwnerToArray",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "applyPendingRewards",
-                "Modifiers": [
-                    "applyPendingRewards",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getPendingETHReward",
-                "Modifiers": [
-                    "getPendingETHReward",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getPendingLUSDDebtReward",
-                "Modifiers": [
-                    "getPendingLUSDDebtReward",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "hasPendingRewards",
-                "Modifiers": [
-                    "hasPendingRewards",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getEntireDebtAndColl",
-                "Modifiers": [
-                    "getEntireDebtAndColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "closeTrove",
-                "Modifiers": [
-                    "closeTrove",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "removeStake",
-                "Modifiers": [
-                    "removeStake",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getRedemptionRate",
-                "Modifiers": [
-                    "getRedemptionRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getRedemptionRateWithDecay",
-                "Modifiers": [
-                    "getRedemptionRateWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getRedemptionFeeWithDecay",
-                "Modifiers": [
-                    "getRedemptionFeeWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingRate",
-                "Modifiers": [
-                    "getBorrowingRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingRateWithDecay",
-                "Modifiers": [
-                    "getBorrowingRateWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingFee",
-                "Modifiers": [
-                    "getBorrowingFee",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingFeeWithDecay",
-                "Modifiers": [
-                    "getBorrowingFeeWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "decayBaseRateFromBorrowing",
-                "Modifiers": [
-                    "decayBaseRateFromBorrowing",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveStatus",
-                "Modifiers": [
-                    "getTroveStatus",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveStake",
-                "Modifiers": [
-                    "getTroveStake",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveDebt",
-                "Modifiers": [
-                    "getTroveDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveColl",
-                "Modifiers": [
-                    "getTroveColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "setTroveStatus",
-                "Modifiers": [
-                    "setTroveStatus",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "increaseTroveColl",
-                "Modifiers": [
-                    "increaseTroveColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "decreaseTroveColl",
-                "Modifiers": [
-                    "decreaseTroveColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "increaseTroveDebt",
-                "Modifiers": [
-                    "increaseTroveDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "decreaseTroveDebt",
-                "Modifiers": [
-                    "decreaseTroveDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTCR",
-                "Modifiers": [
-                    "getTCR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "checkRecoveryMode",
-                "Modifiers": [
-                    "checkRecoveryMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "priceFeed",
-                "Modifiers": [
-                    "priceFeed",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "checkContract",
-                "Modifiers": [
-                    "checkContract",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "constructor",
-                "Modifiers": [
-                    "constructor",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
                     "_owner"
@@ -411,28 +276,19 @@
             },
             {
                 "Function": "owner",
-                "Modifiers": [
-                    "owner",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "isOwner",
-                "Modifiers": [
-                    "isOwner",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_renounceOwnership",
-                "Modifiers": [
-                    "_renounceOwnership",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
                     "_owner"
@@ -440,416 +296,311 @@
             },
             {
                 "Function": "_getCompositeDebt",
-                "Modifiers": [
-                    "_getCompositeDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_getNetDebt",
-                "Modifiers": [
-                    "_getNetDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_getCollGasCompensation",
-                "Modifiers": [
-                    "_getCollGasCompensation",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getEntireSystemColl",
-                "Modifiers": [
-                    "getEntireSystemColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getEntireSystemDebt",
-                "Modifiers": [
-                    "getEntireSystemDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_getTCR",
-                "Modifiers": [
-                    "_getTCR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_checkRecoveryMode",
-                "Modifiers": [
-                    "_checkRecoveryMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireUserAcceptsFee",
-                "Modifiers": [
-                    "_requireUserAcceptsFee",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "setAddresses",
                 "Modifiers": [
-                    "setAddresses",
-                    [
-                        "onlyOwner"
-                    ]
+                    "onlyOwner"
                 ],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
+                    "borrowerOperationsAddress",
                     "activePool",
+                    "gasPoolAddress",
+                    "lqtyToken",
                     "lusdToken",
+                    "priceFeed",
+                    "lqtyStaking",
                     "sortedTroves",
                     "stabilityPool",
-                    "lqtyToken",
-                    "collSurplusPool",
                     "defaultPool",
-                    "lqtyStaking",
-                    "priceFeed",
-                    "borrowerOperationsAddress",
                     "_owner",
-                    "gasPoolAddress"
+                    "collSurplusPool"
                 ]
             },
             {
                 "Function": "getTroveOwnersCount",
-                "Modifiers": [
-                    "getTroveOwnersCount",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveFromTroveOwnersArray",
-                "Modifiers": [
-                    "getTroveFromTroveOwnersArray",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "liquidate",
-                "Modifiers": [
-                    "liquidate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
+                    "totalCollateralSnapshot",
+                    "Troves",
+                    "rewardSnapshots",
+                    "totalStakesSnapshot",
                     "L_LUSDDebt",
                     "lastLUSDDebtError_Redistribution",
-                    "totalStakesSnapshot",
-                    "rewardSnapshots",
                     "L_ETH",
                     "lastETHError_Redistribution",
                     "totalStakes",
-                    "TroveOwners",
-                    "totalCollateralSnapshot",
-                    "Troves"
+                    "TroveOwners"
                 ]
             },
             {
                 "Function": "_liquidateNormalMode",
-                "Modifiers": [
-                    "_liquidateNormalMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
                     "TroveOwners",
+                    "totalStakes",
                     "rewardSnapshots",
-                    "totalStakes"
+                    "Troves"
                 ]
             },
             {
                 "Function": "_liquidateRecoveryMode",
-                "Modifiers": [
-                    "_liquidateRecoveryMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
                     "TroveOwners",
+                    "totalStakes",
                     "rewardSnapshots",
-                    "totalStakes"
+                    "Troves"
                 ]
             },
             {
                 "Function": "_getOffsetAndRedistributionVals",
-                "Modifiers": [
-                    "_getOffsetAndRedistributionVals",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_getCappedOffsetVals",
-                "Modifiers": [
-                    "_getCappedOffsetVals",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "liquidateTroves",
-                "Modifiers": [
-                    "liquidateTroves",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
+                    "totalCollateralSnapshot",
+                    "Troves",
+                    "rewardSnapshots",
+                    "totalStakesSnapshot",
                     "L_LUSDDebt",
                     "lastLUSDDebtError_Redistribution",
-                    "totalStakesSnapshot",
-                    "rewardSnapshots",
                     "L_ETH",
                     "lastETHError_Redistribution",
                     "totalStakes",
-                    "TroveOwners",
-                    "totalCollateralSnapshot",
-                    "Troves"
+                    "TroveOwners"
                 ]
             },
             {
                 "Function": "_getTotalsFromLiquidateTrovesSequence_RecoveryMode",
-                "Modifiers": [
-                    "_getTotalsFromLiquidateTrovesSequence_RecoveryMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
                     "TroveOwners",
-                    "rewardSnapshots",
-                    "totalStakes"
-                ]
-            },
-            {
-                "Function": "_getTotalsFromLiquidateTrovesSequence_NormalMode",
-                "Modifiers": [
-                    "_getTotalsFromLiquidateTrovesSequence_NormalMode",
-                    []
-                ],
-                "msg.sender_conditions": [],
-                "state_variables_written": [
-                    "Troves",
-                    "TroveOwners",
-                    "rewardSnapshots",
-                    "totalStakes"
-                ]
-            },
-            {
-                "Function": "batchLiquidateTroves",
-                "Modifiers": [
-                    "batchLiquidateTroves",
-                    []
-                ],
-                "msg.sender_conditions": [],
-                "state_variables_written": [
-                    "L_LUSDDebt",
-                    "lastLUSDDebtError_Redistribution",
-                    "totalStakesSnapshot",
-                    "rewardSnapshots",
-                    "L_ETH",
-                    "lastETHError_Redistribution",
                     "totalStakes",
-                    "TroveOwners",
-                    "totalCollateralSnapshot",
+                    "rewardSnapshots",
                     "Troves"
                 ]
             },
             {
-                "Function": "_getTotalFromBatchLiquidate_RecoveryMode",
-                "Modifiers": [
-                    "_getTotalFromBatchLiquidate_RecoveryMode",
-                    []
-                ],
+                "Function": "_getTotalsFromLiquidateTrovesSequence_NormalMode",
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
                     "TroveOwners",
+                    "totalStakes",
                     "rewardSnapshots",
-                    "totalStakes"
+                    "Troves"
+                ]
+            },
+            {
+                "Function": "batchLiquidateTroves",
+                "Modifiers": [],
+                "msg.sender_conditions": [],
+                "state_variables_written": [
+                    "totalCollateralSnapshot",
+                    "Troves",
+                    "rewardSnapshots",
+                    "totalStakesSnapshot",
+                    "L_LUSDDebt",
+                    "lastLUSDDebtError_Redistribution",
+                    "L_ETH",
+                    "lastETHError_Redistribution",
+                    "totalStakes",
+                    "TroveOwners"
+                ]
+            },
+            {
+                "Function": "_getTotalFromBatchLiquidate_RecoveryMode",
+                "Modifiers": [],
+                "msg.sender_conditions": [],
+                "state_variables_written": [
+                    "TroveOwners",
+                    "totalStakes",
+                    "rewardSnapshots",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_getTotalsFromBatchLiquidate_NormalMode",
-                "Modifiers": [
-                    "_getTotalsFromBatchLiquidate_NormalMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
                     "TroveOwners",
+                    "totalStakes",
                     "rewardSnapshots",
-                    "totalStakes"
+                    "Troves"
                 ]
             },
             {
                 "Function": "_addLiquidationValuesToTotals",
-                "Modifiers": [
-                    "_addLiquidationValuesToTotals",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_sendGasCompensation",
-                "Modifiers": [
-                    "_sendGasCompensation",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_movePendingTroveRewardsToActivePool",
-                "Modifiers": [
-                    "_movePendingTroveRewardsToActivePool",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_redeemCollateralFromTrove",
-                "Modifiers": [
-                    "_redeemCollateralFromTrove",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
                     "TroveOwners",
+                    "totalStakes",
                     "rewardSnapshots",
-                    "totalStakes"
+                    "Troves"
                 ]
             },
             {
                 "Function": "_redeemCloseTrove",
-                "Modifiers": [
-                    "_redeemCloseTrove",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_isValidFirstRedemptionHint",
-                "Modifiers": [
-                    "_isValidFirstRedemptionHint",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "redeemCollateral",
-                "Modifiers": [
-                    "redeemCollateral",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "assert(bool)(contractsCache.lusdToken.balanceOf(msg.sender) <= totals.totalLUSDSupplyAtStart)"
                 ],
                 "state_variables_written": [
                     "rewardSnapshots",
+                    "Troves",
                     "lastFeeOperationTime",
                     "totalStakes",
-                    "baseRate",
                     "TroveOwners",
-                    "Troves"
+                    "baseRate"
                 ]
             },
             {
                 "Function": "getNominalICR",
-                "Modifiers": [
-                    "getNominalICR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getCurrentICR",
-                "Modifiers": [
-                    "getCurrentICR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_getCurrentTroveAmounts",
-                "Modifiers": [
-                    "_getCurrentTroveAmounts",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "applyPendingRewards",
-                "Modifiers": [
-                    "applyPendingRewards",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
                 "state_variables_written": [
-                    "Troves",
-                    "rewardSnapshots"
+                    "rewardSnapshots",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_applyPendingRewards",
-                "Modifiers": [
-                    "_applyPendingRewards",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
-                    "rewardSnapshots"
+                    "rewardSnapshots",
+                    "Troves"
                 ]
             },
             {
                 "Function": "updateTroveRewardSnapshots",
-                "Modifiers": [
-                    "updateTroveRewardSnapshots",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -859,10 +610,7 @@
             },
             {
                 "Function": "_updateTroveRewardSnapshots",
-                "Modifiers": [
-                    "_updateTroveRewardSnapshots",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
                     "rewardSnapshots"
@@ -870,360 +618,258 @@
             },
             {
                 "Function": "getPendingETHReward",
-                "Modifiers": [
-                    "getPendingETHReward",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getPendingLUSDDebtReward",
-                "Modifiers": [
-                    "getPendingLUSDDebtReward",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "hasPendingRewards",
-                "Modifiers": [
-                    "hasPendingRewards",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getEntireDebtAndColl",
-                "Modifiers": [
-                    "getEntireDebtAndColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "removeStake",
-                "Modifiers": [
-                    "removeStake",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
                 "state_variables_written": [
-                    "Troves",
-                    "totalStakes"
+                    "totalStakes",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_removeStake",
-                "Modifiers": [
-                    "_removeStake",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
-                    "totalStakes"
+                    "totalStakes",
+                    "Troves"
                 ]
             },
             {
                 "Function": "updateStakeAndTotalStakes",
-                "Modifiers": [
-                    "updateStakeAndTotalStakes",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
                 "state_variables_written": [
-                    "Troves",
-                    "totalStakes"
+                    "totalStakes",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_updateStakeAndTotalStakes",
-                "Modifiers": [
-                    "_updateStakeAndTotalStakes",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
-                    "totalStakes"
+                    "totalStakes",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_computeNewStake",
-                "Modifiers": [
-                    "_computeNewStake",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_redistributeDebtAndColl",
-                "Modifiers": [
-                    "_redistributeDebtAndColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "L_ETH",
                     "L_LUSDDebt",
                     "lastETHError_Redistribution",
-                    "lastLUSDDebtError_Redistribution"
+                    "lastLUSDDebtError_Redistribution",
+                    "L_ETH"
                 ]
             },
             {
                 "Function": "closeTrove",
-                "Modifiers": [
-                    "closeTrove",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
                 "state_variables_written": [
-                    "Troves",
+                    "TroveOwners",
                     "rewardSnapshots",
-                    "TroveOwners"
+                    "Troves"
                 ]
             },
             {
                 "Function": "_closeTrove",
-                "Modifiers": [
-                    "_closeTrove",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
+                    "TroveOwners",
                     "rewardSnapshots",
-                    "TroveOwners"
+                    "Troves"
                 ]
             },
             {
                 "Function": "_updateSystemSnapshots_excludeCollRemainder",
-                "Modifiers": [
-                    "_updateSystemSnapshots_excludeCollRemainder",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "totalStakesSnapshot",
-                    "totalCollateralSnapshot"
+                    "totalCollateralSnapshot",
+                    "totalStakesSnapshot"
                 ]
             },
             {
                 "Function": "addTroveOwnerToArray",
-                "Modifiers": [
-                    "addTroveOwnerToArray",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
                 "state_variables_written": [
-                    "Troves",
-                    "TroveOwners"
+                    "TroveOwners",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_addTroveOwnerToArray",
-                "Modifiers": [
-                    "_addTroveOwnerToArray",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
-                    "TroveOwners"
+                    "TroveOwners",
+                    "Troves"
                 ]
             },
             {
                 "Function": "_removeTroveOwner",
-                "Modifiers": [
-                    "_removeTroveOwner",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "Troves",
-                    "TroveOwners"
+                    "TroveOwners",
+                    "Troves"
                 ]
             },
             {
                 "Function": "getTCR",
-                "Modifiers": [
-                    "getTCR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "checkRecoveryMode",
-                "Modifiers": [
-                    "checkRecoveryMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_checkPotentialRecoveryMode",
-                "Modifiers": [
-                    "_checkPotentialRecoveryMode",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_updateBaseRateFromRedemption",
-                "Modifiers": [
-                    "_updateBaseRateFromRedemption",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
-                    "baseRate",
-                    "lastFeeOperationTime"
+                    "lastFeeOperationTime",
+                    "baseRate"
                 ]
             },
             {
                 "Function": "getRedemptionRate",
-                "Modifiers": [
-                    "getRedemptionRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getRedemptionRateWithDecay",
-                "Modifiers": [
-                    "getRedemptionRateWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_calcRedemptionRate",
-                "Modifiers": [
-                    "_calcRedemptionRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_getRedemptionFee",
-                "Modifiers": [
-                    "_getRedemptionFee",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getRedemptionFeeWithDecay",
-                "Modifiers": [
-                    "getRedemptionFeeWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_calcRedemptionFee",
-                "Modifiers": [
-                    "_calcRedemptionFee",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingRate",
-                "Modifiers": [
-                    "getBorrowingRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingRateWithDecay",
-                "Modifiers": [
-                    "getBorrowingRateWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_calcBorrowingRate",
-                "Modifiers": [
-                    "_calcBorrowingRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingFee",
-                "Modifiers": [
-                    "getBorrowingFee",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getBorrowingFeeWithDecay",
-                "Modifiers": [
-                    "getBorrowingFeeWithDecay",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_calcBorrowingFee",
-                "Modifiers": [
-                    "_calcBorrowingFee",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "decayBaseRateFromBorrowing",
-                "Modifiers": [
-                    "decayBaseRateFromBorrowing",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
                 "state_variables_written": [
-                    "baseRate",
-                    "lastFeeOperationTime"
+                    "lastFeeOperationTime",
+                    "baseRate"
                 ]
             },
             {
                 "Function": "_updateLastFeeOpTime",
-                "Modifiers": [
-                    "_updateLastFeeOpTime",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
                     "lastFeeOperationTime"
@@ -1231,28 +877,19 @@
             },
             {
                 "Function": "_calcDecayedBaseRate",
-                "Modifiers": [
-                    "_calcDecayedBaseRate",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_minutesPassedSinceLastFeeOp",
-                "Modifiers": [
-                    "_minutesPassedSinceLastFeeOp",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireCallerIsBorrowerOperations",
-                "Modifiers": [
-                    "_requireCallerIsBorrowerOperations",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -1260,109 +897,73 @@
             },
             {
                 "Function": "_requireTroveIsActive",
-                "Modifiers": [
-                    "_requireTroveIsActive",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireLUSDBalanceCoversRedemption",
-                "Modifiers": [
-                    "_requireLUSDBalanceCoversRedemption",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireMoreThanOneTroveInSystem",
-                "Modifiers": [
-                    "_requireMoreThanOneTroveInSystem",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireAmountGreaterThanZero",
-                "Modifiers": [
-                    "_requireAmountGreaterThanZero",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireTCRoverMCR",
-                "Modifiers": [
-                    "_requireTCRoverMCR",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireAfterBootstrapPeriod",
-                "Modifiers": [
-                    "_requireAfterBootstrapPeriod",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "_requireValidMaxFeePercentage",
-                "Modifiers": [
-                    "_requireValidMaxFeePercentage",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveStatus",
-                "Modifiers": [
-                    "getTroveStatus",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveStake",
-                "Modifiers": [
-                    "getTroveStake",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveDebt",
-                "Modifiers": [
-                    "getTroveDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "getTroveColl",
-                "Modifiers": [
-                    "getTroveColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": []
             },
             {
                 "Function": "setTroveStatus",
-                "Modifiers": [
-                    "setTroveStatus",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -1372,10 +973,7 @@
             },
             {
                 "Function": "increaseTroveColl",
-                "Modifiers": [
-                    "increaseTroveColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -1385,10 +983,7 @@
             },
             {
                 "Function": "decreaseTroveColl",
-                "Modifiers": [
-                    "decreaseTroveColl",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -1398,10 +993,7 @@
             },
             {
                 "Function": "increaseTroveDebt",
-                "Modifiers": [
-                    "increaseTroveDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -1411,10 +1003,7 @@
             },
             {
                 "Function": "decreaseTroveDebt",
-                "Modifiers": [
-                    "decreaseTroveDebt",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [
                     "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                 ],
@@ -1424,27 +1013,24 @@
             },
             {
                 "Function": "slitherConstructorConstantVariables",
-                "Modifiers": [
-                    "slitherConstructorConstantVariables",
-                    []
-                ],
+                "Modifiers": [],
                 "msg.sender_conditions": [],
                 "state_variables_written": [
+                    "MAX_BORROWING_FEE",
+                    "MCR",
+                    "MIN_NET_DEBT",
+                    "BETA",
                     "DECIMAL_PRECISION",
                     "CCR",
                     "PERCENT_DIVISOR",
-                    "SECONDS_IN_ONE_MINUTE",
-                    "BOOTSTRAP_PERIOD",
+                    "REDEMPTION_FEE_FLOOR",
                     "BORROWING_FEE_FLOOR",
                     "LUSD_GAS_COMPENSATION",
-                    "MINUTE_DECAY_FACTOR",
-                    "MCR",
-                    "NAME",
+                    "SECONDS_IN_ONE_MINUTE",
                     "_100pct",
-                    "REDEMPTION_FEE_FLOOR",
-                    "MAX_BORROWING_FEE",
-                    "BETA",
-                    "MIN_NET_DEBT"
+                    "BOOTSTRAP_PERIOD",
+                    "MINUTE_DECAY_FACTOR",
+                    "NAME"
                 ]
             }
         ]
