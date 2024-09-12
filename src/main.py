@@ -38,6 +38,7 @@ def get_msg_sender_checks(function: Function) -> List[str]:
 
 
 def get_permissions(contract: Contract, result: dict, all_state_variables_read: List[str]):
+    
     temp = {
         "Contract_Name": contract.name,
         "Functions": []
@@ -83,15 +84,13 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         })
     
     # dump to result dict
-    result["Contracts"].append(temp)
+    result[contract.name] = temp
 
 # TODO: assume the python script is called in a loop, with 1 address at the time
 def main():
     all_state_variables_read = []
     
-    result = {
-        "Contracts": []
-    }
+    result = {}
 
     args = parse_args()
 
@@ -126,16 +125,23 @@ def main():
     for contract in contracts:
         get_permissions(contract, result, all_state_variables_read)
 
-    # TODO: filter for my variables (if not working, filter the variables after walk slot)
     # sets target variables
     srs.get_all_storage_variables(lambda x: bool(x.name in all_state_variables_read))
-    #srs.get_all_storage_variables() # unfiltered works
+    #srs.get_all_storage_variables() # unfiltered
     
     # computes storage keys for target variables 
     srs.get_target_variables() # can out leave out args?? I think so (optional fields)
 
     # get the values of the target variables and their slots
     srs.walk_slot_info(srs.get_slot_values)
+
+
+    # merge storage retrieval with contracts
+    for key, value in srs.slot_info.items():
+        contractName = key.split(".")[0] # assume key like "TroveManager._owner"
+        contractDict = result[contractName]
+        contractDict[value.name] = value.value
+        
     
     with open("values.json", "w", encoding="utf-8") as file:
         slot_infos_json = srs.to_json()
