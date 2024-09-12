@@ -17,3 +17,7 @@ solc-select use 0.8.20
 # deactivate venv
 source deactivate
 ```
+
+```shell
+python src/main.py <address> --etherscan-apikey=key --rpc-url https://mainnet.infura.io/v3/key
+```
