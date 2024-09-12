@@ -20,4 +20,6 @@ source deactivate
 
 ```shell
 python src/main.py <address> --etherscan-apikey=key --rpc-url https://mainnet.infura.io/v3/key
+
+# Output in data.json
 ```
