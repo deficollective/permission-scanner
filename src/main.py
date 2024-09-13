@@ -88,7 +88,7 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
 
 # TODO: assume the python script is called in a loop, with 1 address at the time
 def main():
-    all_state_variables_read = []
+    target_storage_vars = []
     
     result = {}
 
@@ -122,11 +122,14 @@ def main():
         args.storage_address = address
     srs.storage_address = args.storage_address
 
+    # end setup
+
+    # start analysis
     for contract in contracts:
-        get_permissions(contract, result, all_state_variables_read)
+        get_permissions(contract, result, target_storage_vars)
 
     # sets target variables
-    srs.get_all_storage_variables(lambda x: bool(x.name in all_state_variables_read))
+    srs.get_all_storage_variables(lambda x: bool(x.name in target_storage_vars))
     #srs.get_all_storage_variables() # unfiltered
     
     # computes storage keys for target variables 
@@ -140,6 +143,7 @@ def main():
     for key, value in srs.slot_info.items():
         contractName = key.split(".")[0] # assume key like "TroveManager._owner"
         contractDict = result[contractName]
+        # TODO: add list inside json of target storage vars
         contractDict[value.name] = value.value
         
     
