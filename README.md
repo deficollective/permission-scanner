@@ -36,13 +36,8 @@ INFURA_KEY=your_infura_project_key
 ### scan one address
 
 ```shell
-python src/main.py <address> --etherscan-apikey=key --rpc-url https://mainnet.infura.io/v3/key
+# specify contracts to be scanned inside list_contracts.json
+python src/main.py
 
-# Output in data.json
-```
-
-### scan multiple addresses
-
-```shell
-bash ./main.sh 0xAddress1 0xAddress2 ...
+# Output in result.json
 ```

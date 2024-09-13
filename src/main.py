@@ -3,14 +3,17 @@ from slither.core.declarations.function import Function
 from slither.core.declarations.contract import Contract
 
 from slither.tools.read_storage.read_storage import SlitherReadStorage, RpcInfo
-from slither.exceptions import SlitherError
-
 
 import json
 from typing import  List
 
-from parse import parse_args
+from parse import init_args
+from dotenv import load_dotenv
 
+
+def load_config_from_file(file_path: str) -> dict:
+    with open(file_path, 'r') as file:
+        return json.load(file)
 
 
 # check for msg.sender checks
@@ -33,8 +36,6 @@ def get_msg_sender_checks(function: Function) -> List[str]:
         if "msg.sender" in [v.name for v in n.solidity_variables_read]
     ]
     return all_conditional_nodes_on_msg_sender
-
-
 
 
 def get_permissions(contract: Contract, result: dict, all_state_variables_read: List[str]):
@@ -86,72 +87,64 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
     # dump to result dict
     result[contract.name] = temp
 
-# TODO: assume the python script is called in a loop, with 1 address at the time
 def main():
+    load_dotenv()  # Load environment variables from .env file
+
     target_storage_vars = []
-    
     result = {}
 
-    args = parse_args()
+    # load contracts from json
+    contracts_addresses = load_config_from_file("list_contracts.json")["Contracts"]
 
-    if len(args.contract_source) == 2:
-        # Source code is file.sol or project directory
-        source_code, target = args.contract_source
-        slither = Slither(source_code, **vars(args))
-    else:
-        # Source code is published and retrieved via etherscan
-        target = args.contract_source[0]
+    for contract_address in contracts_addresses:
+        temp = {}
+        args = init_args(contract_address)
+        
+        target = args.contract_source
         slither = Slither(target, **vars(args))
 
-    if args.contract_name:
-        contracts = slither.get_contract_from_name(args.contract_name)
-        if len(contracts) == 0:
-            raise SlitherError(f"Contract {args.contract_name} not found.")
-    else:
         contracts = slither.contracts
-
-    
-    rpc_info = RpcInfo(args.rpc_url, "latest")
-
-    srs = SlitherReadStorage(contracts, args.max_depth, rpc_info)
-    srs.unstructured = bool(args.unstructured)
-    # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
-    address = target[target.find(":") + 1 :]
-    # Default to implementation address unless a storage address is given.
-    if not args.storage_address:
-        args.storage_address = address
-    srs.storage_address = args.storage_address
-
-    # end setup
-
-    # start analysis
-    for contract in contracts:
-        get_permissions(contract, result, target_storage_vars)
-
-    # sets target variables
-    srs.get_all_storage_variables(lambda x: bool(x.name in target_storage_vars))
-    #srs.get_all_storage_variables() # unfiltered
-    
-    # computes storage keys for target variables 
-    srs.get_target_variables() # can out leave out args?? I think so (optional fields)
-
-    # get the values of the target variables and their slots
-    srs.walk_slot_info(srs.get_slot_values)
-
-
-    # merge storage retrieval with contracts
-    for key, value in srs.slot_info.items():
-        contractName = key.split(".")[0] # assume key like "TroveManager._owner"
-        contractDict = result[contractName]
-        # TODO: add list inside json of target storage vars
-        contractDict[value.name] = value.value
         
-    
-    with open("values.json", "w", encoding="utf-8") as file:
-        slot_infos_json = srs.to_json()
-        json.dump(slot_infos_json, file, indent=4)
+        rpc_info = RpcInfo(args.rpc_url, "latest")
 
-    with open("data.json","w") as file:
+        srs = SlitherReadStorage(contracts, args.max_depth, rpc_info)
+        srs.unstructured = False
+        # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
+        address = target[target.find(":") + 1 :]
+        # Default to implementation address unless a storage address is given.
+        args.storage_address = None # set default
+        if not args.storage_address:
+            args.storage_address = address
+        srs.storage_address = args.storage_address
+
+        # end setup
+
+        # start analysis
+        for contract in contracts:
+            get_permissions(contract, temp, target_storage_vars)
+
+        # sets target variables
+        srs.get_all_storage_variables(lambda x: bool(x.name in target_storage_vars))
+        #srs.get_all_storage_variables() # unfiltered
+        
+        # computes storage keys for target variables 
+        srs.get_target_variables() # can out leave out args?? I think so (optional fields)
+
+        # get the values of the target variables and their slots
+        srs.walk_slot_info(srs.get_slot_values)
+
+
+        # merge storage retrieval with contracts
+        for key, value in srs.slot_info.items():
+            contractName = key.split(".")[0] # assume key like "TroveManager._owner"
+            contractDict = temp[contractName]
+            # TODO: add list inside json of target storage vars
+            contractDict[value.name] = value.value
+
+        result[contract_address] = temp
+        
+
+    with open("result.json","w") as file:
         json.dump(result, file, indent=4)
 
 

@@ -29,6 +29,7 @@ parsimonious==0.10.0
 prettytable==3.11.0
 protobuf==5.28.0
 pycryptodome==3.20.0
+python-dotenv==1.0.1
 pyunormalize==15.1.0
 referencing==0.35.1
 regex==2024.7.24
