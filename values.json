@@ -1,8 +1,8 @@
 {
-    "TroveManager._owner": {
+    "LQTYStaking._owner": {
         "name": "_owner",
         "type_string": "address",
-        "slot": 3,
+        "slot": 0,
         "size": 160,
         "offset": 0,
         "value": "0x0000000000000000000000000000000000000000",

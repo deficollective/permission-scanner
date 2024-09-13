@@ -15,10 +15,6 @@
         "Contract_Name": "IERC2612",
         "Functions": []
     },
-    "LiquityBase": {
-        "Contract_Name": "LiquityBase",
-        "Functions": []
-    },
     "LiquityMath": {
         "Contract_Name": "LiquityMath",
         "Functions": []
@@ -35,18 +31,6 @@
         "Contract_Name": "console",
         "Functions": []
     },
-    "IActivePool": {
-        "Contract_Name": "IActivePool",
-        "Functions": []
-    },
-    "ICollSurplusPool": {
-        "Contract_Name": "ICollSurplusPool",
-        "Functions": []
-    },
-    "IDefaultPool": {
-        "Contract_Name": "IDefaultPool",
-        "Functions": []
-    },
     "ILQTYStaking": {
         "Contract_Name": "ILQTYStaking",
         "Functions": []
@@ -59,32 +43,8 @@
         "Contract_Name": "ILUSDToken",
         "Functions": []
     },
-    "ILiquityBase": {
-        "Contract_Name": "ILiquityBase",
-        "Functions": []
-    },
-    "IPool": {
-        "Contract_Name": "IPool",
-        "Functions": []
-    },
-    "IPriceFeed": {
-        "Contract_Name": "IPriceFeed",
-        "Functions": []
-    },
-    "ISortedTroves": {
-        "Contract_Name": "ISortedTroves",
-        "Functions": []
-    },
-    "IStabilityPool": {
-        "Contract_Name": "IStabilityPool",
-        "Functions": []
-    },
-    "ITroveManager": {
-        "Contract_Name": "ITroveManager",
-        "Functions": []
-    },
-    "TroveManager": {
-        "Contract_Name": "TroveManager",
+    "LQTYStaking": {
+        "Contract_Name": "LQTYStaking",
         "Functions": [
             {
                 "Function": "setAddresses",
@@ -97,183 +57,71 @@
                     "_owner"
                 ],
                 "state_variables_written": [
-                    "sortedTroves",
-                    "stabilityPool",
-                    "defaultPool",
-                    "collSurplusPool",
-                    "gasPoolAddress",
-                    "lqtyStaking",
-                    "borrowerOperationsAddress",
                     "lqtyToken",
-                    "priceFeed",
                     "_owner",
-                    "activePool",
+                    "troveManagerAddress",
+                    "borrowerOperationsAddress",
+                    "activePoolAddress",
                     "lusdToken"
                 ]
             },
             {
-                "Function": "redeemCollateral",
+                "Function": "increaseF_ETH",
                 "Modifiers": [],
                 "msg.sender_conditions": [
-                    "assert(bool)(contractsCache.lusdToken.balanceOf(msg.sender) <= totals.totalLUSDSupplyAtStart)"
+                    "require(bool,string)(msg.sender == troveManagerAddress,LQTYStaking: caller is not TroveM)"
                 ],
                 "state_variables_read": [],
                 "state_variables_written": [
-                    "totalStakes",
-                    "baseRate",
-                    "TroveOwners",
-                    "Troves",
-                    "rewardSnapshots",
-                    "lastFeeOperationTime"
+                    "F_ETH"
                 ]
             },
             {
-                "Function": "applyPendingRewards",
+                "Function": "increaseF_LUSD",
                 "Modifiers": [],
                 "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
+                    "require(bool,string)(msg.sender == borrowerOperationsAddress,LQTYStaking: caller is not BorrowerOps)"
                 ],
                 "state_variables_read": [],
                 "state_variables_written": [
-                    "Troves",
-                    "rewardSnapshots"
+                    "F_LUSD"
                 ]
             },
             {
-                "Function": "updateTroveRewardSnapshots",
+                "Function": "_requireCallerIsTroveManager",
                 "Modifiers": [],
                 "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "rewardSnapshots"
-                ]
-            },
-            {
-                "Function": "removeStake",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves",
-                    "totalStakes"
-                ]
-            },
-            {
-                "Function": "updateStakeAndTotalStakes",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves",
-                    "totalStakes"
-                ]
-            },
-            {
-                "Function": "closeTrove",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves",
-                    "rewardSnapshots",
-                    "TroveOwners"
-                ]
-            },
-            {
-                "Function": "addTroveOwnerToArray",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves",
-                    "TroveOwners"
-                ]
-            },
-            {
-                "Function": "decayBaseRateFromBorrowing",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "baseRate",
-                    "lastFeeOperationTime"
-                ]
-            },
-            {
-                "Function": "_requireCallerIsBorrowerOperations",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
+                    "require(bool,string)(msg.sender == troveManagerAddress,LQTYStaking: caller is not TroveM)"
                 ],
                 "state_variables_read": [],
                 "state_variables_written": []
             },
             {
-                "Function": "setTroveStatus",
+                "Function": "_requireCallerIsBorrowerOperations",
                 "Modifiers": [],
                 "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
+                    "require(bool,string)(msg.sender == borrowerOperationsAddress,LQTYStaking: caller is not BorrowerOps)"
                 ],
                 "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves"
-                ]
+                "state_variables_written": []
             },
             {
-                "Function": "increaseTroveColl",
+                "Function": "_requireCallerIsActivePool",
                 "Modifiers": [],
                 "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
+                    "require(bool,string)(msg.sender == activePoolAddress,LQTYStaking: caller is not ActivePool)"
                 ],
                 "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves"
-                ]
+                "state_variables_written": []
             },
             {
-                "Function": "decreaseTroveColl",
+                "Function": "receive",
                 "Modifiers": [],
                 "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
+                    "require(bool,string)(msg.sender == activePoolAddress,LQTYStaking: caller is not ActivePool)"
                 ],
                 "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves"
-                ]
-            },
-            {
-                "Function": "increaseTroveDebt",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves"
-                ]
-            },
-            {
-                "Function": "decreaseTroveDebt",
-                "Modifiers": [],
-                "msg.sender_conditions": [
-                    "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
-                ],
-                "state_variables_read": [],
-                "state_variables_written": [
-                    "Troves"
-                ]
+                "state_variables_written": []
             }
         ],
         "_owner": "0x0000000000000000000000000000000000000000"
