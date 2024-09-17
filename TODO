@@ -1,4 +1,15 @@
 potential areas of improvement
-- no bash script, just one python script (how to make Slither know etherscan-apikey)
-- merge all contracts into one file
+
 - modifier onlyOwner didn't fill `state_variables_read` why?
+
+today
+
+scanner (2h)
+
+- target storage vars should be elements in an array ✅
+- put in msg.sender conditions from modifiers into the list
+- test on other chains as well
+
+static page (3h)
+
+- create a skeleton

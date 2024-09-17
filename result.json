@@ -93,23 +93,23 @@
                         "onlyOwner"
                     ],
                     "msg.sender_conditions": [],
-                    "state_variables_read": [
-                        "_owner",
-                        "msg.sender"
+                    "state_variables_read_inside_modifiers": [
+                        "msg.sender",
+                        "_owner"
                     ],
                     "state_variables_written": [
+                        "gasPoolAddress",
                         "lqtyToken",
+                        "lusdToken",
                         "sortedTroves",
                         "defaultPool",
                         "priceFeed",
-                        "_owner",
+                        "stabilityPool",
                         "collSurplusPool",
-                        "borrowerOperationsAddress",
                         "lqtyStaking",
                         "activePool",
-                        "stabilityPool",
-                        "gasPoolAddress",
-                        "lusdToken"
+                        "_owner",
+                        "borrowerOperationsAddress"
                     ]
                 },
                 {
@@ -118,14 +118,14 @@
                     "msg.sender_conditions": [
                         "assert(bool)(contractsCache.lusdToken.balanceOf(msg.sender) <= totals.totalLUSDSupplyAtStart)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
+                        "lastFeeOperationTime",
                         "totalStakes",
+                        "rewardSnapshots",
                         "baseRate",
                         "TroveOwners",
-                        "Troves",
-                        "rewardSnapshots",
-                        "lastFeeOperationTime"
+                        "Troves"
                     ]
                 },
                 {
@@ -134,7 +134,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves",
                         "rewardSnapshots"
@@ -146,7 +146,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "rewardSnapshots"
                     ]
@@ -157,7 +157,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves",
                         "totalStakes"
@@ -169,7 +169,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves",
                         "totalStakes"
@@ -181,7 +181,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves",
                         "rewardSnapshots",
@@ -194,7 +194,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "TroveOwners",
                         "Troves"
@@ -206,7 +206,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "baseRate",
                         "lastFeeOperationTime"
@@ -218,7 +218,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": []
                 },
                 {
@@ -227,7 +227,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves"
                     ]
@@ -238,7 +238,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves"
                     ]
@@ -249,7 +249,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves"
                     ]
@@ -260,7 +260,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves"
                     ]
@@ -271,13 +271,15 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,TroveManager: Caller is not the BorrowerOperations contract)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "Troves"
                     ]
                 }
             ],
-            "_owner": "0x0000000000000000000000000000000000000000"
+            "storage_values": {
+                "_owner": "0x0000000000000000000000000000000000000000"
+            }
         }
     },
     "0x4f9Fbb3f1E99B56e0Fe2892e623Ed36A76Fc605d": {
@@ -334,17 +336,17 @@
                         "onlyOwner"
                     ],
                     "msg.sender_conditions": [],
-                    "state_variables_read": [
+                    "state_variables_read_inside_modifiers": [
                         "msg.sender",
                         "_owner"
                     ],
                     "state_variables_written": [
-                        "lusdToken",
-                        "lqtyToken",
                         "troveManagerAddress",
                         "borrowerOperationsAddress",
                         "activePoolAddress",
-                        "_owner"
+                        "_owner",
+                        "lusdToken",
+                        "lqtyToken"
                     ]
                 },
                 {
@@ -353,7 +355,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == troveManagerAddress,LQTYStaking: caller is not TroveM)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "F_ETH"
                     ]
@@ -364,7 +366,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,LQTYStaking: caller is not BorrowerOps)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": [
                         "F_LUSD"
                     ]
@@ -375,7 +377,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == troveManagerAddress,LQTYStaking: caller is not TroveM)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": []
                 },
                 {
@@ -384,7 +386,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == borrowerOperationsAddress,LQTYStaking: caller is not BorrowerOps)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": []
                 },
                 {
@@ -393,7 +395,7 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == activePoolAddress,LQTYStaking: caller is not ActivePool)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": []
                 },
                 {
@@ -402,11 +404,13 @@
                     "msg.sender_conditions": [
                         "require(bool,string)(msg.sender == activePoolAddress,LQTYStaking: caller is not ActivePool)"
                     ],
-                    "state_variables_read": [],
+                    "state_variables_read_inside_modifiers": [],
                     "state_variables_written": []
                 }
             ],
-            "_owner": "0x0000000000000000000000000000000000000000"
+            "storage_values": {
+                "_owner": "0x0000000000000000000000000000000000000000"
+            }
         }
     }
 }

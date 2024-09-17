@@ -20,8 +20,11 @@ def load_config_from_file(file_path: str) -> dict:
 def get_msg_sender_checks(function: Function) -> List[str]:
     all_functions = (
         [f for f in function.all_internal_calls() if isinstance(f, Function)]
+        + [m for f in function.all_internal_calls() if isinstance(f, Function) for m in f.modifiers]
         + [function]
         + [m for m in function.modifiers if isinstance(m, Function)]
+        + [call for (_, call) in function.all_library_calls() if isinstance(call, Function)]
+        + [m for (_, call) in function.all_library_calls() if isinstance(call, Function) for m in call.modifiers]
     )
 
     all_nodes_ = [f.nodes for f in all_functions]
@@ -65,7 +68,6 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         
         # TODO: retrieve variables from msg.sender condition 
 
-        # TODO: remove
         # list all state variables that are read
         state_variables_read = [v.name for modifier in modifiers for v in modifier.all_variables_read() if v.name]
         all_state_variables_read.extend(state_variables_read)
@@ -80,7 +82,7 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
             "Function": function.name,
             "Modifiers": listOfModifiers,
             "msg.sender_conditions": msg_sender_condition,
-            "state_variables_read": state_variables_read,
+            "state_variables_read_inside_modifiers": state_variables_read,
             "state_variables_written": state_variables_written
         })
     
@@ -134,12 +136,14 @@ def main():
         srs.walk_slot_info(srs.get_slot_values)
 
 
+        storageValues = {}
         # merge storage retrieval with contracts
         for key, value in srs.slot_info.items():
             contractName = key.split(".")[0] # assume key like "TroveManager._owner"
             contractDict = temp[contractName]
-            # TODO: add list inside json of target storage vars
-            contractDict[value.name] = value.value
+            storageValues[value.name] = value.value
+        
+        contractDict["storage_values"] = storageValues
 
         result[contract_address] = temp
         
