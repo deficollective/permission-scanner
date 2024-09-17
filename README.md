@@ -41,3 +41,29 @@ python src/main.py
 
 # Output in result.json
 ```
+
+## Filter Contracts
+
+Supported Networks to fetch contracts from
+
+```json
+"mainet:": (".etherscan.io", "etherscan.io")
+"optim:": ("-optimistic.etherscan.io", "optimistic.etherscan.io")
+"goerli:": ("-goerli.etherscan.io", "goerli.etherscan.io")
+"sepolia:": ("-sepolia.etherscan.io", "sepolia.etherscan.io")
+"tobalaba:": ("-tobalaba.etherscan.io", "tobalaba.etherscan.io")
+"bsc:": (".bscscan.com", "bscscan.com")
+"testnet.bsc:": ("-testnet.bscscan.com", "testnet.bscscan.com")
+"arbi:": (".arbiscan.io", "arbiscan.io")
+"testnet.arbi:": ("-testnet.arbiscan.io", "testnet.arbiscan.io")
+"poly:": (".polygonscan.com", "polygonscan.com")
+"mumbai:": ("-testnet.polygonscan.com", "testnet.polygonscan.com")
+"avax:": (".snowtrace.io", "snowtrace.io")
+"testnet.avax:": ("-testnet.snowtrace.io", "testnet.snowtrace.io")
+"ftm:": (".ftmscan.com", "ftmscan.com")
+"goerli.base:": ("-goerli.basescan.org", "goerli.basescan.org")
+"base:": (".basescan.org", "basescan.org")
+"gno:": (".gnosisscan.io", "gnosisscan.io")
+"polyzk:": ("-zkevm.polygonscan.com", "zkevm.polygonscan.com")
+"blast:": (".blastscan.io", "blastscan.io")
+```
