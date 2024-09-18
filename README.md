@@ -5,6 +5,7 @@
 - Python installed on your machine.
 - A valid Etherscan API key.
 - A valid Infura Project key.
+- `solc` compiler
 
 ## Setup Instructions
 
@@ -15,9 +16,6 @@ python -m venv venv
 source venv/bin/activate
 # install dependencies
 pip install -r requirements.txt
-# install & select solc compiler
-solc-select install 0.8.20
-solc-select use 0.8.20
 # deactivate venv
 source deactivate
 ```
@@ -40,6 +38,8 @@ python src/main.py
 
 # Output in result.json
 ```
+
+If you don't have the correct `solc` compiler version, `solc` will install it before running the rest of the script.
 
 ## Supported Networks
 

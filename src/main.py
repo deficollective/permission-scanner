@@ -6,6 +6,8 @@ from slither.tools.read_storage.read_storage import SlitherReadStorage, RpcInfo
 
 import json
 from typing import  List
+import urllib.error
+
 
 from parse import init_args
 from get_rpc_url import get_rpc_url
@@ -112,8 +114,15 @@ def main():
         args = init_args(contract_address, chain_name, rpc_url, platform_key)
         
         target = args.contract_source
-        slither = Slither(target, **vars(args))
-
+        
+        try:
+            slither = Slither(target, **vars(args))
+        except urllib.error.HTTPError as e:
+            print(f"Failed to compile contract at {contract_address} due to HTTP error: {e}")
+            continue  # Skip this contract and move to the next one
+        except Exception as e:
+            print(f"An error occurred while analyzing {contract_address}: {e}")
+            continue
         contracts = slither.contracts
         
         rpc_info = RpcInfo(args.rpc_url, "latest")
@@ -142,8 +151,16 @@ def main():
         srs.get_target_variables() # can out leave out args?? I think so (optional fields)
 
         # get the values of the target variables and their slots
-        srs.walk_slot_info(srs.get_slot_values)
 
+        try:
+            srs.walk_slot_info(srs.get_slot_values)
+        except urllib.error.HTTPError as e:
+            print(f"Failed to fetch storage from contract at {contract_address} due to HTTP error: {e}")
+            continue  # Skip this contract and move to the next one
+        except Exception as e:
+            print(f"An error occurred while fetching storage slots from contract {contract_address}: {e}")
+            continue
+        
 
         storageValues = {}
         # merge storage retrieval with contracts
