@@ -41,6 +41,10 @@ python src/main.py
 
 If you don't have the correct `solc` compiler version, `solc` will install it before running the rest of the script.
 
+## Results
+
+Move results inside result.json into a folder with the name of the protocol.
+
 ## Supported Networks
 
 Supported Networks to fetch and scan contracts from
