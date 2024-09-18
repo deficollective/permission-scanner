@@ -1,15 +1,15 @@
 from crytic_compile import cryticparser
-import argparse
-import os
+from argparse import ArgumentParser, Namespace
 
-def init_args(contract_address: str) -> argparse.Namespace:
+
+def init_args(contract_address: str, chain_name: str, rpc_url: str, platform_key: str) -> Namespace:
     """Parse the underlying arguments for the program.
     Returns:
         The arguments for the program.
     """
 
     # create a ArgumentParser for cryticparser.init
-    parser = argparse.ArgumentParser(
+    parser = ArgumentParser(
         description="Read a variable's value from storage for a deployed contract",
         usage=("\nProvide secrets in env file\n"),
     )
@@ -29,9 +29,9 @@ def init_args(contract_address: str) -> argparse.Namespace:
     # Set defaults for arguments programmatically
     # Hyphens (-) in argument names are automatically converted to underscores (_)
     parser.set_defaults(
-        contract_source=contract_address,
-        rpc_url=f'https://mainnet.infura.io/v3/{os.getenv("INFURA_KEY")}',
-        etherscan_api_key=os.getenv("ETHERSCAN_API_KEY"),
+        contract_source=f'{chain_name}:{contract_address}',
+        rpc_url=rpc_url,
+        etherscan_api_key=platform_key,
     )
 
     # requires a ArgumentParser instance

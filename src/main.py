@@ -8,6 +8,8 @@ import json
 from typing import  List
 
 from parse import init_args
+from get_rpc_url import get_rpc_url
+from get_platform_key import get_platform_key
 from dotenv import load_dotenv
 
 
@@ -92,15 +94,22 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
 def main():
     load_dotenv()  # Load environment variables from .env file
 
+    # load contracts from json
+    json_object = load_config_from_file("list_contracts.json")
+    
+    contracts_addresses = json_object["Contracts"]
+    
+    chain_name = json_object["Chain_Name"]
+    rpc_url = get_rpc_url(chain_name)
+    platform_key = get_platform_key(chain_name)
+
     target_storage_vars = []
     result = {}
 
-    # load contracts from json
-    contracts_addresses = load_config_from_file("list_contracts.json")["Contracts"]
 
     for contract_address in contracts_addresses:
         temp = {}
-        args = init_args(contract_address)
+        args = init_args(contract_address, chain_name, rpc_url, platform_key)
         
         target = args.contract_source
         slither = Slither(target, **vars(args))

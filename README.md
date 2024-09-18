@@ -24,12 +24,7 @@ source deactivate
 
 ### .env file
 
-Create env file with the following keys
-
-```
-ETHERSCAN_API_KEY=your_etherscan_api_key
-INFURA_KEY=your_infura_project_key
-```
+See `.env.example` for the required env vars needed
 
 ## Run
 
@@ -37,6 +32,7 @@ INFURA_KEY=your_infura_project_key
 
 ```shell
 # specify contracts to be scanned inside list_contracts.json
+# specify the chain where the platform is based on in the same json.
 python src/main.py
 
 # Output in result.json
