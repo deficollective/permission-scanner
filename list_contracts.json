@@ -1,7 +1,4 @@
 {
-  "Chain_Name": "mainet",
-  "Contracts": [
-    "0xA39739EF8b0231DbFA0DcdA07d7e29faAbCf4bb2",
-    "0x4f9Fbb3f1E99B56e0Fe2892e623Ed36A76Fc605d"
-  ]
+  "Chain_Name": "optim",
+  "Contracts": ["0x6dc9E1C04eE59ed3531d73a72256C0da46D10982"]
 }

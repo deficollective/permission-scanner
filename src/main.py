@@ -152,7 +152,8 @@ def main():
             contractDict = temp[contractName]
             storageValues[value.name] = value.value
         
-        contractDict["storage_values"] = storageValues
+        if len(storageValues.values()):
+            contractDict["storage_values"] = storageValues
 
         result[contract_address] = temp
         
