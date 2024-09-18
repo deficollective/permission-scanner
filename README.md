@@ -26,21 +26,24 @@ source deactivate
 
 See `.env.example` for the required env vars needed
 
+## Input
+
+Inside `list_contracts.json` the contracts of a protocol and the chain need to be specified.
+
+Note: For chain names take from below in [Supported Networks](#supported-networks)
+
 ## Run
 
-### scan one address
-
 ```shell
-# specify contracts to be scanned inside list_contracts.json
-# specify the chain where the platform is based on in the same json.
+# specified contracts and chain from list_contracts.json
 python src/main.py
 
 # Output in result.json
 ```
 
-## Filter Contracts
+## Supported Networks
 
-Supported Networks to fetch contracts from
+Supported Networks to fetch and scan contracts from
 
 ```json
 "mainet:": (".etherscan.io", "etherscan.io")
