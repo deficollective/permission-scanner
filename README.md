@@ -70,3 +70,25 @@ Supported Networks to fetch and scan contracts from
 "polyzk:": ("-zkevm.polygonscan.com", "zkevm.polygonscan.com")
 "blast:": (".blastscan.io", "blastscan.io")
 ```
+
+## Sources of Contracts
+
+### Aerodrome (Base)
+
+https://aerodrome.finance/security#contracts
+
+### Liquity (Mainnet)
+
+https://docs.liquity.org/documentation/resources
+
+### Dyad
+
+https://dyad.gitbook.io/docs/info/contracts
+
+## Maverick V2
+
+https://docs.mav.xyz/technical-reference/contract-addresses/v2-contract-addresses#ethereum-mainnet-1
+
+## Velodrome
+
+https://velodrome.finance/security#contracts
