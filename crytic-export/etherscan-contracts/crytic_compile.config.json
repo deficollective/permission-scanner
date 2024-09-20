@@ -1,0 +1,1 @@
+{"solc_remaps": {}, "solc_solcs_select": "0.6.6", "solc_args": "--optimize --optimize-runs 1000000"}
