@@ -97,7 +97,7 @@ def main():
     load_dotenv()  # Load environment variables from .env file
 
     # load contracts from json
-    json_object = load_config_from_file("list_contracts.json")
+    json_object = load_config_from_file("contracts.json")
     
     contracts_addresses = json_object["Contracts"]
     
@@ -175,7 +175,7 @@ def main():
         result[contract_address] = temp
         
 
-    with open("result.json","w") as file:
+    with open("permissions.json","w") as file:
         json.dump(result, file, indent=4)
 
 

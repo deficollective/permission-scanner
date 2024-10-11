@@ -18,7 +18,7 @@ In order to scan a protocol for permissioned functions, the target protocol is s
 Create and activate a virtual Python environment, and install the required Python packages with
 
 ```shell
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
