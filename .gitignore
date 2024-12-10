@@ -2,3 +2,6 @@
 .env
 src/__pycache__
 /crytic-export
+
+contracts.json
+permissions.json

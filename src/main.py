@@ -100,6 +100,7 @@ def main():
     json_object = load_config_from_file("contracts.json")
     
     contracts_addresses = json_object["Contracts"]
+    project_name = json_object["Project_Name"]
     
     chain_name = json_object["Chain_Name"]
     rpc_url = get_rpc_url(chain_name)
@@ -111,7 +112,7 @@ def main():
 
     for contract_address in contracts_addresses:
         temp = {}
-        args = init_args(contract_address, chain_name, rpc_url, platform_key)
+        args = init_args(project_name, contract_address, chain_name, rpc_url, platform_key)
         
         target = args.contract_source
         

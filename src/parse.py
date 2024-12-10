@@ -2,7 +2,7 @@ from crytic_compile import cryticparser
 from argparse import ArgumentParser, Namespace
 
 
-def init_args(contract_address: str, chain_name: str, rpc_url: str, platform_key: str) -> Namespace:
+def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url: str, platform_key: str) -> Namespace:
     """Parse the underlying arguments for the program.
     Returns:
         The arguments for the program.
@@ -28,11 +28,36 @@ def init_args(contract_address: str, chain_name: str, rpc_url: str, platform_key
 
     # Set defaults for arguments programmatically
     # Hyphens (-) in argument names are automatically converted to underscores (_)
-    parser.set_defaults(
-        contract_source=f'{chain_name}:{contract_address}',
-        rpc_url=rpc_url,
-        etherscan_api_key=platform_key,
-    )
+    if (chain_name == "base"):
+        parser.set_defaults(
+            contract_source=f'{chain_name}:{contract_address}',
+            rpc_url=rpc_url,
+            base_api_key=platform_key,
+            etherscan_api_key=platform_key,
+            export_dir=f'results/{project_name}'
+        )
+    elif (chain_name == "arbi"):
+        parser.set_defaults(
+            contract_source=f'{chain_name}:{contract_address}',
+            rpc_url=rpc_url,
+            arbiscan_api_key=platform_key,
+            etherscan_api_key=platform_key,
+            export_dir=f'results/{project_name}'
+        )
+    elif (chain_name == "mainnet"):
+        parser.set_defaults(
+            contract_source=f'mainet:{contract_address}',
+            rpc_url=rpc_url,
+            etherscan_api_key=platform_key,
+            export_dir=f'results/{project_name}'
+        )
+    else:
+        parser.set_defaults(
+            contract_source=f'{chain_name}:{contract_address}',
+            rpc_url=rpc_url,
+            etherscan_api_key=platform_key,
+            export_dir=f'results/{project_name}'
+        )
 
     # requires a ArgumentParser instance
     cryticparser.init(parser)
