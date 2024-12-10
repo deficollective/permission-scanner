@@ -82,3 +82,7 @@ Permissions are identified by the usage of `onlyOwner` modifiers or `msg.sender`
 The permission scanner attempts to read permission owners from contract storage directly. This can fail, in particular if a contract uses an upgradeability pattern, and should be manually verified.
 
 The permission scanner *only* identifies permissions and their owners but does not assess the impact or risks of such permissions.
+
+## Acknowledgements
+
+The permission scanner is built on the Slither [static analyzer](https://github.com/crytic/slither). We thank the [Trail of Bits](https://www.trailofbits.com/) team for creating this open-source tool and all the work they have done for the security in the DeFi sector.
