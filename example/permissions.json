@@ -1,0 +1,1575 @@
+{
+  "0xfd03723a9a3abe0562451496a9a394d2c4bad4ab": {
+    "Owned": {
+      "Contract_Name": "Owned",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        }
+      ]
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "Dyad": {
+      "Contract_Name": "Dyad",
+      "Functions": [
+        {
+          "Function": "mint",
+          "Modifiers": ["licensedVaultManager"],
+          "msg.sender_conditions": [
+            "! licenser.isLicensed(msg.sender)",
+            "! licenser.isLicensed(msg.sender)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "licenser"],
+          "state_variables_written": ["balanceOf", "totalSupply", "mintedDyad"]
+        },
+        {
+          "Function": "burn",
+          "Modifiers": ["licensedVaultManager"],
+          "msg.sender_conditions": [
+            "! licenser.isLicensed(msg.sender)",
+            "! licenser.isLicensed(msg.sender)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "licenser"],
+          "state_variables_written": ["balanceOf", "totalSupply", "mintedDyad"]
+        }
+      ]
+    },
+    "Licenser": {
+      "Contract_Name": "Licenser",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "add",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["isLicensed"]
+        },
+        {
+          "Function": "remove",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["isLicensed"]
+        }
+      ],
+      "storage_values": {
+        "owner": "0x0000000000000000000000000000000000000016"
+      }
+    },
+    "IDyad": {
+      "Contract_Name": "IDyad",
+      "Functions": []
+    }
+  },
+  "0xDc400bBe0B8B79C07A962EA99a642F5819e3b712": {
+    "ERC721": {
+      "Contract_Name": "ERC721",
+      "Functions": []
+    },
+    "IERC721": {
+      "Contract_Name": "IERC721",
+      "Functions": []
+    },
+    "IERC721Receiver": {
+      "Contract_Name": "IERC721Receiver",
+      "Functions": []
+    },
+    "ERC721Enumerable": {
+      "Contract_Name": "ERC721Enumerable",
+      "Functions": []
+    },
+    "IERC721Enumerable": {
+      "Contract_Name": "IERC721Enumerable",
+      "Functions": []
+    },
+    "IERC721Metadata": {
+      "Contract_Name": "IERC721Metadata",
+      "Functions": []
+    },
+    "Address": {
+      "Contract_Name": "Address",
+      "Functions": []
+    },
+    "Context": {
+      "Contract_Name": "Context",
+      "Functions": []
+    },
+    "Strings": {
+      "Contract_Name": "Strings",
+      "Functions": []
+    },
+    "ERC165": {
+      "Contract_Name": "ERC165",
+      "Functions": []
+    },
+    "IERC165": {
+      "Contract_Name": "IERC165",
+      "Functions": []
+    },
+    "Math": {
+      "Contract_Name": "Math",
+      "Functions": []
+    },
+    "SignedMath": {
+      "Contract_Name": "SignedMath",
+      "Functions": []
+    },
+    "Owned": {
+      "Contract_Name": "Owned",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        }
+      ]
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "SafeTransferLib": {
+      "Contract_Name": "SafeTransferLib",
+      "Functions": []
+    },
+    "DNft": {
+      "Contract_Name": "DNft",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "mintInsiderNft",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": [
+            "_ownedTokensIndex",
+            "_owners",
+            "_allTokensIndex",
+            "insiderMints",
+            "_balances",
+            "_ownedTokens",
+            "_allTokens"
+          ]
+        },
+        {
+          "Function": "drain",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": []
+        }
+      ],
+      "storage_values": {
+        "owner": "0xDeD796De6a14E255487191963dEe436c45995813"
+      }
+    },
+    "IDNft": {
+      "Contract_Name": "IDNft",
+      "Functions": []
+    }
+  },
+  "0xfe81952a0a2c6ab603ef1b3cc69e1b6bffa92697": {
+    "Owned": {
+      "Contract_Name": "Owned",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        }
+      ]
+    },
+    "VaultLicenser": {
+      "Contract_Name": "VaultLicenser",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "add",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["licenses"]
+        },
+        {
+          "Function": "remove",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["licenses"]
+        }
+      ],
+      "storage_values": {
+        "owner": "0xDeD796De6a14E255487191963dEe436c45995813"
+      }
+    }
+  },
+  "0x13421d816572f61048b2c855de88807aec58494b": {
+    "OwnableUpgradeable": {
+      "Contract_Name": "OwnableUpgradeable",
+      "Functions": [
+        {
+          "Function": "__Context_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "$",
+            "INITIALIZABLE_STORAGE",
+            "TMP_16"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Context_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "$",
+            "INITIALIZABLE_STORAGE",
+            "TMP_16"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Ownable_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "$",
+            "INITIALIZABLE_STORAGE",
+            "TMP_16",
+            "$",
+            "INITIALIZABLE_STORAGE",
+            "TMP_16"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Ownable_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "$",
+            "INITIALIZABLE_STORAGE",
+            "TMP_16"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "renounceOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "OwnableStorageLocation",
+            "$",
+            "$"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "OwnableStorageLocation",
+            "$",
+            "$"
+          ],
+          "state_variables_written": []
+        }
+      ]
+    },
+    "Initializable": {
+      "Contract_Name": "Initializable",
+      "Functions": []
+    },
+    "UUPSUpgradeable": {
+      "Contract_Name": "UUPSUpgradeable",
+      "Functions": [
+        {
+          "Function": "__UUPSUpgradeable_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "TMP_112",
+            "INITIALIZABLE_STORAGE",
+            "$"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__UUPSUpgradeable_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "TMP_112",
+            "INITIALIZABLE_STORAGE",
+            "$"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "proxiableUUID",
+          "Modifiers": ["notDelegated"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": ["__self", "this"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "upgradeToAndCall",
+          "Modifiers": ["onlyProxy"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "slot",
+            "ERC1967Utils",
+            "StorageSlot",
+            "this",
+            "TMP_194",
+            "__self",
+            "IMPLEMENTATION_SLOT",
+            "r"
+          ],
+          "state_variables_written": []
+        }
+      ]
+    },
+    "ContextUpgradeable": {
+      "Contract_Name": "ContextUpgradeable",
+      "Functions": [
+        {
+          "Function": "__Context_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_171"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Context_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_171"
+          ],
+          "state_variables_written": []
+        }
+      ]
+    },
+    "IERC1822Proxiable": {
+      "Contract_Name": "IERC1822Proxiable",
+      "Functions": []
+    },
+    "IERC20Errors": {
+      "Contract_Name": "IERC20Errors",
+      "Functions": []
+    },
+    "IERC721Errors": {
+      "Contract_Name": "IERC721Errors",
+      "Functions": []
+    },
+    "IERC1155Errors": {
+      "Contract_Name": "IERC1155Errors",
+      "Functions": []
+    },
+    "ERC1967Utils": {
+      "Contract_Name": "ERC1967Utils",
+      "Functions": []
+    },
+    "IBeacon": {
+      "Contract_Name": "IBeacon",
+      "Functions": []
+    },
+    "ERC721": {
+      "Contract_Name": "ERC721",
+      "Functions": []
+    },
+    "IERC721": {
+      "Contract_Name": "IERC721",
+      "Functions": []
+    },
+    "IERC721Receiver": {
+      "Contract_Name": "IERC721Receiver",
+      "Functions": []
+    },
+    "ERC721Enumerable": {
+      "Contract_Name": "ERC721Enumerable",
+      "Functions": []
+    },
+    "IERC721Enumerable": {
+      "Contract_Name": "IERC721Enumerable",
+      "Functions": []
+    },
+    "IERC721Metadata": {
+      "Contract_Name": "IERC721Metadata",
+      "Functions": []
+    },
+    "Address": {
+      "Contract_Name": "Address",
+      "Functions": []
+    },
+    "Context": {
+      "Contract_Name": "Context",
+      "Functions": []
+    },
+    "StorageSlot": {
+      "Contract_Name": "StorageSlot",
+      "Functions": []
+    },
+    "Strings": {
+      "Contract_Name": "Strings",
+      "Functions": []
+    },
+    "ERC165": {
+      "Contract_Name": "ERC165",
+      "Functions": []
+    },
+    "IERC165": {
+      "Contract_Name": "IERC165",
+      "Functions": []
+    },
+    "Math": {
+      "Contract_Name": "Math",
+      "Functions": []
+    },
+    "SafeCast": {
+      "Contract_Name": "SafeCast",
+      "Functions": []
+    },
+    "SignedMath": {
+      "Contract_Name": "SignedMath",
+      "Functions": []
+    },
+    "EnumerableSet": {
+      "Contract_Name": "EnumerableSet",
+      "Functions": []
+    },
+    "Owned": {
+      "Contract_Name": "Owned",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        }
+      ]
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "FixedPointMathLib": {
+      "Contract_Name": "FixedPointMathLib",
+      "Functions": []
+    },
+    "SafeTransferLib": {
+      "Contract_Name": "SafeTransferLib",
+      "Functions": []
+    },
+    "DNft": {
+      "Contract_Name": "DNft",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "mintInsiderNft",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": [
+            "_owners",
+            "_allTokens",
+            "_balances",
+            "_ownedTokens",
+            "_tokenApprovals",
+            "insiderMints",
+            "_ownedTokensIndex",
+            "_allTokensIndex"
+          ]
+        },
+        {
+          "Function": "drain",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": []
+        }
+      ]
+    },
+    "Dyad": {
+      "Contract_Name": "Dyad",
+      "Functions": [
+        {
+          "Function": "mint",
+          "Modifiers": ["licensedVaultManager"],
+          "msg.sender_conditions": [
+            "! licenser.isLicensed(msg.sender)",
+            "! licenser.isLicensed(msg.sender)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "licenser"],
+          "state_variables_written": ["balanceOf", "totalSupply", "mintedDyad"]
+        },
+        {
+          "Function": "burn",
+          "Modifiers": ["licensedVaultManager"],
+          "msg.sender_conditions": [
+            "! licenser.isLicensed(msg.sender)",
+            "! licenser.isLicensed(msg.sender)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "licenser"],
+          "state_variables_written": ["balanceOf", "totalSupply", "mintedDyad"]
+        }
+      ]
+    },
+    "Licenser": {
+      "Contract_Name": "Licenser",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "add",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["isLicensed"]
+        },
+        {
+          "Function": "remove",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["isLicensed"]
+        }
+      ]
+    },
+    "Vault": {
+      "Contract_Name": "Vault",
+      "Functions": [
+        {
+          "Function": "deposit",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "withdraw",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "move",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        }
+      ]
+    },
+    "VaultLicenser": {
+      "Contract_Name": "VaultLicenser",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "add",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["licenses"]
+        },
+        {
+          "Function": "remove",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["licenses"]
+        }
+      ]
+    },
+    "VaultManagerV2": {
+      "Contract_Name": "VaultManagerV2",
+      "Functions": [
+        {
+          "Function": "__Ownable_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625",
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Ownable_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "renounceOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "$",
+            "OwnableStorageLocation",
+            "$"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "$",
+            "OwnableStorageLocation",
+            "$"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Context_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__Context_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__UUPSUpgradeable_init",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "__UUPSUpgradeable_init_unchained",
+          "Modifiers": ["onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "proxiableUUID",
+          "Modifiers": ["notDelegated"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": ["__self", "this"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "upgradeToAndCall",
+          "Modifiers": ["onlyProxy"],
+          "msg.sender_conditions": ["msg.sender != owner()"],
+          "state_variables_read_inside_modifiers": [
+            "slot",
+            "ERC1967Utils",
+            "StorageSlot",
+            "this",
+            "TMP_194",
+            "__self",
+            "IMPLEMENTATION_SLOT",
+            "r"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "initialize",
+          "Modifiers": ["initializer", "onlyInitializing"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": [
+            "$",
+            "isTopLevelCall",
+            "construction",
+            "this",
+            "$",
+            "INITIALIZABLE_STORAGE",
+            "initialized",
+            "TMP_1775",
+            "initialSetup",
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625",
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625",
+            "INITIALIZABLE_STORAGE",
+            "$",
+            "TMP_1625"
+          ],
+          "state_variables_written": ["dNft", "vaultLicenser", "dyad"]
+        },
+        {
+          "Function": "add",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "dNft", "id"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "remove",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "dNft", "id"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "deposit",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "dNft", "id"],
+          "state_variables_written": ["lastDeposit"]
+        },
+        {
+          "Function": "withdraw",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "dNft", "id"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "mintDyad",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "dNft", "id"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "burnDyad",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "dNft", "id"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "redeemDyad",
+          "Modifiers": ["isDNftOwner"],
+          "msg.sender_conditions": [
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender",
+            "dNft.ownerOf(id) != msg.sender"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "dNft",
+            "id",
+            "msg.sender",
+            "dNft",
+            "id",
+            "msg.sender",
+            "dNft",
+            "id"
+          ],
+          "state_variables_written": []
+        },
+        {
+          "Function": "liquidate",
+          "Modifiers": ["isValidDNft"],
+          "msg.sender_conditions": [],
+          "state_variables_read_inside_modifiers": ["dNft", "id", "dNft", "id"],
+          "state_variables_written": ["lastDeposit"]
+        },
+        {
+          "Function": "_authorizeUpgrade",
+          "Modifiers": [],
+          "msg.sender_conditions": ["msg.sender != owner()"],
+          "state_variables_read_inside_modifiers": [],
+          "state_variables_written": []
+        }
+      ],
+      "storage_values": {
+        "owner": "0x0000000000000000000000000000000000000000",
+        "dNft": "0000000000000000000000000000000000000000"
+      }
+    },
+    "IAggregatorV3": {
+      "Contract_Name": "IAggregatorV3",
+      "Functions": []
+    },
+    "IDNft": {
+      "Contract_Name": "IDNft",
+      "Functions": []
+    },
+    "IDyad": {
+      "Contract_Name": "IDyad",
+      "Functions": []
+    },
+    "IVault": {
+      "Contract_Name": "IVault",
+      "Functions": []
+    },
+    "IVaultManager": {
+      "Contract_Name": "IVaultManager",
+      "Functions": []
+    },
+    "DNftParameters": {
+      "Contract_Name": "DNftParameters",
+      "Functions": []
+    }
+  },
+  "0xb62bdb1a6ac97a9b70957dd35357311e8859f0d7": {
+    "ERC1967Proxy": {
+      "Contract_Name": "ERC1967Proxy",
+      "Functions": []
+    },
+    "ERC1967Utils": {
+      "Contract_Name": "ERC1967Utils",
+      "Functions": []
+    },
+    "Proxy": {
+      "Contract_Name": "Proxy",
+      "Functions": []
+    },
+    "IBeacon": {
+      "Contract_Name": "IBeacon",
+      "Functions": []
+    },
+    "Address": {
+      "Contract_Name": "Address",
+      "Functions": []
+    },
+    "StorageSlot": {
+      "Contract_Name": "StorageSlot",
+      "Functions": []
+    }
+  },
+  "0xf3768D6e78E65FC64b8F12ffc824452130BD5394": {
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "Kerosine": {
+      "Contract_Name": "Kerosine",
+      "Functions": []
+    }
+  },
+  "0xfccf9d9466ed79afed2abc46350bfb78f7b47b90": {
+    "EnumerableSet": {
+      "Contract_Name": "EnumerableSet",
+      "Functions": []
+    },
+    "Owned": {
+      "Contract_Name": "Owned",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        }
+      ]
+    },
+    "KerosineManager": {
+      "Contract_Name": "KerosineManager",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "add",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": []
+        },
+        {
+          "Function": "remove",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": []
+        }
+      ],
+      "storage_values": {
+        "owner": "0xDeD796De6a14E255487191963dEe436c45995813"
+      }
+    }
+  },
+  "0x4b3dd4ceb943efd7d169a1baaeec63097601e88e": {
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "Parameters": {
+      "Contract_Name": "Parameters",
+      "Functions": []
+    },
+    "Kerosine": {
+      "Contract_Name": "Kerosine",
+      "Functions": []
+    },
+    "KerosineDenominator": {
+      "Contract_Name": "KerosineDenominator",
+      "Functions": []
+    }
+  },
+  "0x4fde0131694ae08c549118c595923ce0b42f8299": {
+    "SafeCast": {
+      "Contract_Name": "SafeCast",
+      "Functions": []
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "FixedPointMathLib": {
+      "Contract_Name": "FixedPointMathLib",
+      "Functions": []
+    },
+    "SafeTransferLib": {
+      "Contract_Name": "SafeTransferLib",
+      "Functions": []
+    },
+    "Vault": {
+      "Contract_Name": "Vault",
+      "Functions": [
+        {
+          "Function": "deposit",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "withdraw",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "move",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        }
+      ]
+    },
+    "IAggregatorV3": {
+      "Contract_Name": "IAggregatorV3",
+      "Functions": []
+    },
+    "IDNft": {
+      "Contract_Name": "IDNft",
+      "Functions": []
+    },
+    "IVault": {
+      "Contract_Name": "IVault",
+      "Functions": []
+    },
+    "IVaultManager": {
+      "Contract_Name": "IVaultManager",
+      "Functions": []
+    }
+  },
+  "0x7e5f2b8f089a4cd27f5b6b846306020800df45bd": {
+    "SafeCast": {
+      "Contract_Name": "SafeCast",
+      "Functions": []
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "FixedPointMathLib": {
+      "Contract_Name": "FixedPointMathLib",
+      "Functions": []
+    },
+    "SafeTransferLib": {
+      "Contract_Name": "SafeTransferLib",
+      "Functions": []
+    },
+    "VaultWstEth": {
+      "Contract_Name": "VaultWstEth",
+      "Functions": [
+        {
+          "Function": "deposit",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "withdraw",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "move",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        }
+      ]
+    },
+    "IAggregatorV3": {
+      "Contract_Name": "IAggregatorV3",
+      "Functions": []
+    },
+    "IDNft": {
+      "Contract_Name": "IDNft",
+      "Functions": []
+    },
+    "IVault": {
+      "Contract_Name": "IVault",
+      "Functions": []
+    },
+    "IVaultManager": {
+      "Contract_Name": "IVaultManager",
+      "Functions": []
+    },
+    "IWstETH": {
+      "Contract_Name": "IWstETH",
+      "Functions": []
+    }
+  },
+  "0x3D72f7Fc3A9537e1fcC6FBF91AF55CcF2c5C4ed0": {
+    "SafeCast": {
+      "Contract_Name": "SafeCast",
+      "Functions": []
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "FixedPointMathLib": {
+      "Contract_Name": "FixedPointMathLib",
+      "Functions": []
+    },
+    "SafeTransferLib": {
+      "Contract_Name": "SafeTransferLib",
+      "Functions": []
+    },
+    "BtcVault": {
+      "Contract_Name": "BtcVault",
+      "Functions": [
+        {
+          "Function": "deposit",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "withdraw",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "move",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        }
+      ]
+    },
+    "IAggregatorV3": {
+      "Contract_Name": "IAggregatorV3",
+      "Functions": []
+    },
+    "IDNft": {
+      "Contract_Name": "IDNft",
+      "Functions": []
+    },
+    "IVault": {
+      "Contract_Name": "IVault",
+      "Functions": []
+    },
+    "IVaultManager": {
+      "Contract_Name": "IVaultManager",
+      "Functions": []
+    }
+  },
+  "0x3FC5c0e19b6287f25EB271c2E8e7Ba898FE7ab29": {
+    "IERC20Errors": {
+      "Contract_Name": "IERC20Errors",
+      "Functions": []
+    },
+    "IERC721Errors": {
+      "Contract_Name": "IERC721Errors",
+      "Functions": []
+    },
+    "IERC1155Errors": {
+      "Contract_Name": "IERC1155Errors",
+      "Functions": []
+    },
+    "ERC721": {
+      "Contract_Name": "ERC721",
+      "Functions": []
+    },
+    "IERC721": {
+      "Contract_Name": "IERC721",
+      "Functions": []
+    },
+    "IERC721Receiver": {
+      "Contract_Name": "IERC721Receiver",
+      "Functions": []
+    },
+    "ERC721Enumerable": {
+      "Contract_Name": "ERC721Enumerable",
+      "Functions": []
+    },
+    "IERC721Enumerable": {
+      "Contract_Name": "IERC721Enumerable",
+      "Functions": []
+    },
+    "IERC721Metadata": {
+      "Contract_Name": "IERC721Metadata",
+      "Functions": []
+    },
+    "Context": {
+      "Contract_Name": "Context",
+      "Functions": []
+    },
+    "Strings": {
+      "Contract_Name": "Strings",
+      "Functions": []
+    },
+    "ERC165": {
+      "Contract_Name": "ERC165",
+      "Functions": []
+    },
+    "IERC165": {
+      "Contract_Name": "IERC165",
+      "Functions": []
+    },
+    "Math": {
+      "Contract_Name": "Math",
+      "Functions": []
+    },
+    "SafeCast": {
+      "Contract_Name": "SafeCast",
+      "Functions": []
+    },
+    "SignedMath": {
+      "Contract_Name": "SignedMath",
+      "Functions": []
+    },
+    "Owned": {
+      "Contract_Name": "Owned",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        }
+      ]
+    },
+    "ERC20": {
+      "Contract_Name": "ERC20",
+      "Functions": []
+    },
+    "FixedPointMathLib": {
+      "Contract_Name": "FixedPointMathLib",
+      "Functions": []
+    },
+    "SafeTransferLib": {
+      "Contract_Name": "SafeTransferLib",
+      "Functions": []
+    },
+    "DNft": {
+      "Contract_Name": "DNft",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "mintInsiderNft",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": [
+            "_allTokensIndex",
+            "_owners",
+            "_balances",
+            "_ownedTokens",
+            "_ownedTokensIndex",
+            "_tokenApprovals",
+            "_allTokens",
+            "insiderMints"
+          ]
+        },
+        {
+          "Function": "drain",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": []
+        }
+      ]
+    },
+    "VaultStakedUSDe": {
+      "Contract_Name": "VaultStakedUSDe",
+      "Functions": [
+        {
+          "Function": "transferOwnership",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["owner"]
+        },
+        {
+          "Function": "deposit",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "withdraw",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "move",
+          "Modifiers": ["onlyVaultManager"],
+          "msg.sender_conditions": [
+            "msg.sender != address(vaultManager)",
+            "msg.sender != address(vaultManager)"
+          ],
+          "state_variables_read_inside_modifiers": [
+            "msg.sender",
+            "vaultManager"
+          ],
+          "state_variables_written": ["id2asset"]
+        },
+        {
+          "Function": "setDepositCap",
+          "Modifiers": ["onlyOwner"],
+          "msg.sender_conditions": [
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)",
+            "require(bool,string)(msg.sender == owner,UNAUTHORIZED)"
+          ],
+          "state_variables_read_inside_modifiers": ["msg.sender", "owner"],
+          "state_variables_written": ["depositCap"]
+        }
+      ],
+      "storage_values": {
+        "owner": "0xDeD796De6a14E255487191963dEe436c45995813"
+      }
+    },
+    "IAggregatorV3": {
+      "Contract_Name": "IAggregatorV3",
+      "Functions": []
+    },
+    "IDNft": {
+      "Contract_Name": "IDNft",
+      "Functions": []
+    },
+    "IVault": {
+      "Contract_Name": "IVault",
+      "Functions": []
+    },
+    "IVaultManager": {
+      "Contract_Name": "IVaultManager",
+      "Functions": []
+    },
+    "DNftParameters": {
+      "Contract_Name": "DNftParameters",
+      "Functions": []
+    }
+  }
+}

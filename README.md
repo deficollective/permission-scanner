@@ -29,7 +29,7 @@ Copy the `.env.example` file to `.env` and, depending on the network where the c
 source .env
 ```
 
-Complete the file `./contracts.json` with the chain name and addresses of all contracts of the protocol. Find a list of supported chains [here](#supported-chains). 
+Create a file called `./contracts.json` with the chain name, project name and addresses of all contracts of the protocol. Find a list of supported chains [here](#supported-chains). See an existing example in the example folder.
 
 Then execute the scanner script with
 
@@ -39,7 +39,7 @@ python src/main.py
 
 Note, if you don't have the correct `solc` compiler version, it will be installed automatically by the script.
 
-The script will write the results of the scanner in a new file `./permissions.json`.
+The script will write the results of the scanner in a new file `./permissions.json`. See an existing example in the example folder.
 
 Once you have your analysis completed, you can deactivate the Pyhton environment again with the following command
 
@@ -81,7 +81,7 @@ Permissions are identified by the usage of `onlyOwner` modifiers or `msg.sender`
 
 The permission scanner attempts to read permission owners from contract storage directly. This can fail, in particular if a contract uses an upgradeability pattern, and should be manually verified.
 
-The permission scanner *only* identifies permissions and their owners but does not assess the impact or risks of such permissions.
+The permission scanner _only_ identifies permissions and their owners but does not assess the impact or risks of such permissions.
 
 ## Acknowledgements
 
