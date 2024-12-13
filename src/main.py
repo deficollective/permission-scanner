@@ -112,7 +112,7 @@ def main():
 
     for contract_address in contracts_addresses:
         temp = {}
-        args = init_args(project_name, contract_address, chain_name, rpc_url, platform_key)
+        args = init_args(project_name, contract_address["address"], chain_name, rpc_url, platform_key)
         
         target = args.contract_source
         
@@ -124,11 +124,17 @@ def main():
         except Exception as e:
             print(f"An error occurred while analyzing {contract_address}: {e}")
             continue
-        contracts = slither.contracts
+        contracts = slither.contracts_derived
+        
+        # only take the one contract that is in the key
+        target_contract = [contract for contract in contracts if contract.name == contract_address["name"]]
+
+        target_contract[0].comments
+        
         
         rpc_info = RpcInfo(args.rpc_url, "latest")
 
-        srs = SlitherReadStorage(contracts, args.max_depth, rpc_info)
+        srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
         srs.unstructured = False
         # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
         address = target[target.find(":") + 1 :]
@@ -141,7 +147,7 @@ def main():
         # end setup
 
         # start analysis
-        for contract in contracts:
+        for contract in target_contract:
             get_permissions(contract, temp, target_storage_vars)
 
         # sets target variables
@@ -173,7 +179,7 @@ def main():
         if len(storageValues.values()):
             contractDict["storage_values"] = storageValues
 
-        result[contract_address] = temp
+        result[contract_address["address"]] = temp
         
 
     with open("permissions.json","w") as file:
