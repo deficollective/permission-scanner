@@ -31,6 +31,8 @@ source .env
 
 Create a file called `./contracts.json` with the chain name, project name and addresses of all contracts of the protocol. Find a list of supported chains [here](#supported-chains). See an existing example in the example folder.
 
+Note in the `contracts.json` file the contract names have to exactly match otherwise the contracts are not included in the output successfully.
+
 Then execute the scanner script with
 
 ```shell

@@ -128,9 +128,6 @@ def main():
         
         # only take the one contract that is in the key
         target_contract = [contract for contract in contracts if contract.name == contract_address["name"]]
-
-        target_contract[0].comments
-        
         
         rpc_info = RpcInfo(args.rpc_url, "latest")
 
@@ -155,7 +152,7 @@ def main():
         #srs.get_all_storage_variables() # unfiltered
         
         # computes storage keys for target variables 
-        srs.get_target_variables() # can out leave out args?? I think so (optional fields)
+        srs.get_target_variables()
 
         # get the values of the target variables and their slots
 
