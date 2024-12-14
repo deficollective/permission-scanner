@@ -136,10 +136,7 @@ def main():
         # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
         address = target[target.find(":") + 1 :]
         # Default to implementation address unless a storage address is given.
-        args.storage_address = None # set default
-        if not args.storage_address:
-            args.storage_address = address
-        srs.storage_address = args.storage_address
+        srs.storage_address = address
 
         # end setup
 
