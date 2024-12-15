@@ -2,7 +2,7 @@ from slither.slither import Slither
 from slither.core.declarations.function import Function
 from slither.core.declarations.contract import Contract
 
-from slither.tools.read_storage.read_storage import SlitherReadStorage, RpcInfo
+from slither.tools.read_storage.read_storage import SlitherReadStorage, RpcInfo, get_storage_data
 
 import json
 from typing import  List
@@ -111,7 +111,7 @@ def main():
 
 
     for contract_address in contracts_addresses:
-        temp = {}
+        temp_global = {}
         args = init_args(project_name, contract_address["address"], chain_name, rpc_url, platform_key)
         
         target = args.contract_source
@@ -125,29 +125,49 @@ def main():
             print(f"An error occurred while analyzing {contract_address}: {e}")
             continue
         contracts = slither.contracts_derived
-        
+
         # only take the one contract that is in the key
         target_contract = [contract for contract in contracts if contract.name == contract_address["name"]]
         
         rpc_info = RpcInfo(args.rpc_url, "latest")
-
         srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
         srs.unstructured = False
         # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
         address = target[target.find(":") + 1 :]
-        # Default to implementation address unless a storage address is given.
         srs.storage_address = address
 
         # end setup
 
         # start analysis
         for contract in target_contract:
-            get_permissions(contract, temp, target_storage_vars)
+            # get permissions and store target_storage_vars
+            get_permissions(contract, temp_global, target_storage_vars)
 
-        # sets target variables
-        srs.get_all_storage_variables(lambda x: bool(x.name in target_storage_vars))
-        #srs.get_all_storage_variables() # unfiltered
-        
+        target_storage_vars = list(set(target_storage_vars)) # remove duplicates
+
+        # adapted logic, extracted from get_all_storage_variables of SlitherReadStorage class
+        # sets target variables    
+        for contract in srs._contracts:
+            for var in contract.state_variables_ordered:
+                if var.name in target_storage_vars:
+                    srs._target_variables.append((contract, var))
+                if not var.is_stored:
+                    # add all constant and immutable variable to a list to do the required look-up manually
+
+                    contractDict = temp_global[target_contract[0].name]
+                    
+                    # contractDict["Functions"] is a list, functionData a dict
+                    for functionData in contractDict["Functions"]:
+                        # check if e.g storage variable owner is part of this function 
+                        if var.name in functionData["state_variables_read_inside_modifiers"]:
+                            # check if already added some constants/immutables
+                            if "immutables_and_constants" in functionData:
+                                # add constants and immutables
+                                functionData["immutables_and_constants"].append(var.name)
+                            else:
+                                # add constants and immutables
+                                functionData["immutables_and_constants"] = [var.name]
+
         # computes storage keys for target variables 
         srs.get_target_variables()
 
@@ -167,13 +187,19 @@ def main():
         # merge storage retrieval with contracts
         for key, value in srs.slot_info.items():
             contractName = key.split(".")[0] # assume key like "TroveManager._owner"
-            contractDict = temp[contractName]
+            contractDict = temp_global[contractName]
             storageValues[value.name] = value.value
+            # contractDict["Functions"] is a list, functionData a dict
+            for functionData in contractDict["Functions"]:
+                # check if e.g storage variable owner is part of this function 
+                if value.name in functionData["state_variables_read_inside_modifiers"]:
+                    # if so, add a key value pair to the functionData object, to improve readability of report
+                    functionData[value.name] = value.value
         
         if len(storageValues.values()):
             contractDict["storage_values"] = storageValues
 
-        result[contract_address["address"]] = temp
+        result[contract_address["address"]] = temp_global
         
 
     with open("permissions.json","w") as file:
