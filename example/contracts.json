@@ -9,11 +9,8 @@
       "address": "0xfe81952a0a2c6ab603ef1b3cc69e1b6bffa92697"
     },
     {
-      "name": "VaultManagerV4",
-      "address": "0x259286552c3f5a76594d0bc24d499639f8652c99"
-    },
-    {
       "name": "ERC1967Proxy",
+      "implementation_name": "VaultManagerV5",
       "address": "0xb62bdb1a6ac97a9b70957dd35357311e8859f0d7"
     },
     {
