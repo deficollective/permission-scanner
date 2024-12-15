@@ -136,6 +136,26 @@ def main():
         address = target[target.find(":") + 1 :]
         srs.storage_address = address
 
+        # step 1: check if inheriting a proxy pattern
+        # step 2: create slither object again, but with implementation address
+        #    -> run analysis of storage layout on implementation address
+        # step 3: read storage still from contract_address["address"]
+        # print(target_contract[0].inheritance[0].name)
+        for inheritedContract in target_contract[0].inheritance:
+            if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS"]:
+                IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
+                raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
+                # switch to implementation address, for storage layout
+                implementation_address = srs.convert_value_to_type(raw_value, 160, 0, "address")
+                slither = Slither(implementation_address, **vars(args))
+                # rewrite target_contract
+                # user needs to supply the contract name of the proxy
+                contracts = slither.contracts_derived
+                target_contract = [contract for contract in contracts if contract.name == contract_address["implementation_name"]]
+                temp_global["Implementation_Contract_Address"] = implementation_address
+                temp_global["Proxy_Address"] = contract_address["address"]
+                break
+
         # end setup
 
         # start analysis
