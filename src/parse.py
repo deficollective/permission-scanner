@@ -16,8 +16,11 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
 
     # Add arguments (this step is required before setting defaults)
     parser.add_argument("--contract_source", nargs="+", help="Contract address or project directory")
+    parser.add_argument("--export-dir", help="where downloaded files should be stored")
     parser.add_argument("--rpc-url", help="RPC endpoint URL")
     parser.add_argument("--etherscan-api-key", help="Etherscan API key")
+    parser.add_argument("--base-api-key", help="Basescan API key")
+    parser.add_argument("--arbiscan-api-key", help="Arbiscan API key")
     parser.add_argument("--max-depth", help="Max depth to search in data structure.", default=20)
     parser.add_argument(
         "--block",
