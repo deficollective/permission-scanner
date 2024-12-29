@@ -143,11 +143,15 @@ def main():
         # print(target_contract[0].inheritance[0].name)
         for inheritedContract in target_contract[0].inheritance:
             if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS"]:
+                try:
+                    contract_address["implementation_name"]
+                except KeyError:
+                    raise Exception(f'Proxy Contracts need a name for the implementation contract for contract {contract_address["address"]}. Please adhere to the template.')
                 IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
                 raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
                 # switch to implementation address, for storage layout
                 implementation_address = srs.convert_value_to_type(raw_value, 160, 0, "address")
-                slither = Slither(implementation_address, **vars(args))
+                slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
                 # rewrite target_contract
                 # user needs to supply the contract name of the proxy
                 contracts = slither.contracts_derived
@@ -224,6 +228,7 @@ def main():
 
     with open("permissions.json","w") as file:
         json.dump(result, file, indent=4)
+
 
 
 

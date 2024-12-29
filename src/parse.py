@@ -21,7 +21,7 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
     parser.add_argument("--etherscan-api-key", help="Etherscan API key")
     parser.add_argument("--base-api-key", help="Basescan API key")
     parser.add_argument("--arbiscan-api-key", help="Arbiscan API key")
-    parser.add_argument("--poly-api-key", help="Polygon API key")
+    parser.add_argument("--polygonscan-api-key", help="Polygon API key")
     parser.add_argument("--max-depth", help="Max depth to search in data structure.", default=20)
     parser.add_argument(
         "--block",
@@ -52,7 +52,7 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
         parser.set_defaults(
             contract_source=f'{chain_name}:{contract_address}',
             rpc_url=rpc_url,
-            poly_api_key=platform_key,
+            polygonscan_api_key=platform_key,
             etherscan_api_key=platform_key,
             export_dir=f'results/{project_name}'
         )

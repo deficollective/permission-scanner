@@ -11,7 +11,7 @@ In order to scan a protocol for permissioned functions, the target protocol is s
 - Python3 installed on your machine
 - `solc` compiler
 - A valid Etherscan API key (see env variables)
-- A valid Infura Project key (see env variables)
+- A valid RPC api key, e.g Infura or Alchemy (see env variables)
 
 ## Getting started
 
@@ -29,9 +29,27 @@ Copy the `.env.example` file to `.env` and, depending on the network where the c
 source .env
 ```
 
-Create a file called `./contracts.json` with the chain name, project name and addresses of all contracts of the protocol. Find a list of supported chains [here](#supported-chains). See an existing example in the example folder.
+Create a file called `./contracts.json` with the chain name, project name and addresses of all contracts of the protocol. Find a list of supported chains [here](#supported-chains). See an existing `example` at `./example/contracts.json` on how to specify the input for the scanner.
 
-Note in the `contracts.json` file the contract names have to exactly match otherwise the contracts are not included in the output successfully.
+> See an existing `example` at `./example/contracts.json` on how to specify the input for the scanner
+
+> Note in the `contracts.json` file the contract names have to exactly match otherwise the contracts are not included in the output successfully.
+
+> If one contract is a proxy, please also specify the implementation contract name to compile the output, the implementation contract address is not required.
+
+Example:
+
+```json
+{
+  "name": "ERC1967Proxy",
+  "implementation_name": "VaultManagerV5",
+  "address": "0xb62bdb1a6ac97a9b70957dd35357311e8859f0d7"
+}
+```
+
+The name of the implementation contract can be retrieved e.g on etherscan, when clicking on the address of the implementation and check the contracts tab of this.
+
+![Etherscan](example/etherscan.png)
 
 Then execute the scanner script with
 
