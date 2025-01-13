@@ -142,7 +142,7 @@ def main():
         # step 3: read storage still from contract_address["address"]
         # print(target_contract[0].inheritance[0].name)
         for inheritedContract in target_contract[0].inheritance:
-            if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS"]:
+            if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS", "UpgradeableProxy"]:
                 try:
                     contract_address["implementation_name"]
                 except KeyError:
@@ -154,8 +154,8 @@ def main():
                 slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
                 # rewrite target_contract
                 # user needs to supply the contract name of the proxy
-                contracts = slither.contracts_derived
-                target_contract = [contract for contract in contracts if contract.name == contract_address["implementation_name"]]
+                contracts_implementation = slither.contracts_derived
+                target_contract.extend([contract for contract in contracts_implementation if contract.name == contract_address["implementation_name"]])
                 temp_global["Implementation_Contract_Address"] = implementation_address
                 temp_global["Proxy_Address"] = contract_address["address"]
                 break
