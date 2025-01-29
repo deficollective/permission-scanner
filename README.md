@@ -93,6 +93,32 @@ Supported chains to fetch and screen contracts from
 "blast:": (".blastscan.io", "blastscan.io")
 ```
 
+# Access Control Scanner
+
+If a contract uses Access Control by Open Zeppelin reading from storage is not straight forward as the addresses owning the permissions are not enumerated, but have to be queried from a mapping. These addresses can be unknown to us the on-chain detectives. Thus we go through the events emitted by the contract to get the addresses owning the permissions.
+
+## How it works
+
+Use of end block is advised to not hit the limit by the RPC provider. Check on etherscan.io the block number of the latest transaction in your target contract.
+
+### With positional arguments
+
+```shell
+python src/access-control-scanner/main.py <contract_address> <chain_name> <starting_block> <end_block>
+```
+
+### With named arguments
+
+```shell
+python src/access-control-scanner/main.py \
+    --contract_address 0x1234... \
+    --chain_name mainnet \
+    --starting_block 1234567 \
+    --end_block 7654321
+```
+
+It creates a file and returns a list of detected bytes32 values (encoded roles) and a list of addresses owning the roles.
+
 ## Limitations
 
 The permission scanner does NOT guarantee that the provided set of contract addresses is complete, or that the contracts in fact are part of the protocol.
