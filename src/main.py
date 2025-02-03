@@ -9,7 +9,7 @@ from typing import  List
 import urllib.error
 
 
-from parse import init_args
+from parse import init_args, chainNameParser
 from get_rpc_url import get_rpc_url
 from get_platform_key import get_platform_key
 from dotenv import load_dotenv
@@ -102,7 +102,7 @@ def main():
     contracts_addresses = json_object["Contracts"]
     project_name = json_object["Project_Name"]
     
-    chain_name = json_object["Chain_Name"]
+    chain_name = chainNameParser(json_object["Chain_Name"])
     rpc_url = get_rpc_url(chain_name)
     platform_key = get_platform_key(chain_name)
 

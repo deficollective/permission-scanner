@@ -2,7 +2,7 @@ import os
 
 def get_rpc_url(network: str) -> str:
     rpc_urls = {
-        "mainnet": os.getenv("MAINNET_RPC"),
+        "mainet": os.getenv("MAINNET_RPC"),
         "optim": os.getenv("OPTIMISTIC_RPC"),
         "base": os.getenv("BASE_RPC"),
         "poly": os.getenv("POLYGON_RPC"),
