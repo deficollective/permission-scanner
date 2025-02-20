@@ -119,18 +119,19 @@ def main():
         try:
             slither = Slither(target, **vars(args))
         except urllib.error.HTTPError as e:
-            print(f"\033[33mFailed to compile contract at {contract_address} due to HTTP error: {e}\033[33m")
+            print(f"\033[33mFailed to compile contract at {contract_address} due to HTTP error: {e}\033[0m")
             continue  # Skip this contract and move to the next one
         except Exception as e:
-            print(f"\033[33mAn error occurred while analyzing {contract_address}: {e}\033[33m")
+            print(f"\033[33mAn error occurred while analyzing {contract_address}: {e}\033[0m")
             continue
-        contracts = slither.contracts_derived
+
+        contracts = slither.contracts
 
         # only take the one contract that is in the key
         target_contract = [contract for contract in contracts if contract.name == contract_address["name"]]
 
         if len(target_contract) == 0:
-            raise Exception(f"\033[31m\n \nThe contract name supplied in contract.json does not match any of the found contract names for this address: {contract_address}\033[31m")
+            raise Exception(f"\033[31m\n \nThe contract name supplied in contract.json does not match any of the found contract names for this address: {contract_address}\033[0m")
         
         rpc_info = RpcInfo(args.rpc_url, "latest")
         srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
@@ -149,7 +150,7 @@ def main():
                 try:
                     contract_address["implementation_name"]
                 except KeyError:
-                    raise Exception(f'\033[31mProxy Contracts need a name for the implementation contract for contract {contract_address["address"]}. Please adhere to the template.\033[31m')
+                    raise Exception(f'\033[31mProxy Contracts need a name for the implementation contract for contract {contract_address["address"]}. Please adhere to the template.\033[0m')
                 IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
                 raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
                 # switch to implementation address, for storage layout
@@ -203,10 +204,10 @@ def main():
         try:
             srs.walk_slot_info(srs.get_slot_values)
         except urllib.error.HTTPError as e:
-            print(f"\033[33mFailed to fetch storage from contract at {contract_address} due to HTTP error: {e}\033[33m")
+            print(f"\033[33mFailed to fetch storage from contract at {contract_address} due to HTTP error: {e}\033[0m")
             continue  # Skip this contract and move to the next one
         except Exception as e:
-            print(f"\033[33mAn error occurred while fetching storage slots from contract {contract_address}: {e}\033[33m")
+            print(f"\033[33mAn error occurred while fetching storage slots from contract {contract_address}: {e}\033[0m")
             continue
         
 
