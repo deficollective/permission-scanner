@@ -1,92 +1,114 @@
 import argparse
 import json
 from enum import Enum
-from web3 import Web3
 from typing import Dict, List
 import sys
 import time
 from tqdm import tqdm
 import os
+import requests
+from web3 import Web3
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from get_rpc_url import get_rpc_url
+from get_platform_key import get_platform_key
 
 # Event signatures
 ROLE_GRANTED_EVENT = "RoleGranted(bytes32,address,address)"
 ROLE_REVOKED_EVENT = "RoleRevoked(bytes32,address,address)"
 ROLE_ADMIN_CHANGED_EVENT = "RoleAdminChanged(bytes32,bytes32,bytes32)"
 
+# Hash the event signatures
+w3 = Web3()
+EVENT_SIGNATURES = {
+    'RoleGranted': w3.keccak(text=ROLE_GRANTED_EVENT).hex(),
+    'RoleRevoked': w3.keccak(text=ROLE_REVOKED_EVENT).hex(),
+    'RoleAdminChanged': w3.keccak(text=ROLE_ADMIN_CHANGED_EVENT).hex()
+}
+
 class Action(Enum):
     GRANTED = "granted"
     REVOKED = "revoked"
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Access Control Scanner')
+    parser = argparse.ArgumentParser(description='Access Control Scanner (Etherscan API)')
     parser.add_argument('--contract_address', required=True, help='Contract address to scan')
     parser.add_argument('--chain_name', required=True, help='Chain name')
     parser.add_argument('--starting_block', type=int, required=True, help='Starting block number')
     parser.add_argument('--end_block', type=int, help='End block number (defaults to current block)')
     return parser.parse_args()
 
-def get_event_signatures(w3):
-    return {
-        'RoleGranted': w3.keccak(text=ROLE_GRANTED_EVENT).hex(),
-        'RoleRevoked': w3.keccak(text=ROLE_REVOKED_EVENT).hex(),
-        'RoleAdminChanged': w3.keccak(text=ROLE_ADMIN_CHANGED_EVENT).hex()
+def get_etherscan_url(chain_name: str) -> str:
+    urls = {
+        "mainnet": "https://api.etherscan.io/api",
+        "optim": "https://api-optimistic.etherscan.io/api",
+        "base": "https://api.basescan.org/api",
+        "poly": "https://api.polygonscan.com/api"
     }
+    return urls.get(chain_name, "https://api.etherscan.io/api")
 
-def process_events(w3, contract_address: str, start_block: int, end_block: int, event_signatures: Dict[str, str]) -> Dict:
+def process_events(api_url: str, api_key: str, contract_address: str, start_block: int, end_block: int) -> Dict:
     temp: Dict[str, List[Dict]] = {}
-    
-    # Process blocks in chunks to avoid RPC throttling
-    CHUNK_SIZE = 1000
-    num_chunks = (end_block - start_block + CHUNK_SIZE) // CHUNK_SIZE
+    page = 1
+    offset = 1000  # Number of records per page
     
     print(f"\nScanning blocks {start_block} to {end_block}")
-    print(f"Processing {num_chunks} chunks of {CHUNK_SIZE} blocks each")
+    print("Using Etherscan API for data retrieval")
     
     try:
-        for block in tqdm(range(start_block, end_block + 1, CHUNK_SIZE), desc="Scanning blocks"):
-            
-            chunk_end = min(block + CHUNK_SIZE - 1, end_block)
-            
+        while True:
             try:
+                params = {
+                    'module': 'logs',
+                    'action': 'getLogs',
+                    'address': contract_address,
+                    'fromBlock': start_block,
+                    'toBlock': end_block,
+                    'page': page,
+                    'offset': offset,
+                    'apikey': api_key
+                }
                 
-                # Get logs for all events
-                logs = w3.eth.get_logs({
-                    'fromBlock': block,
-                    'toBlock': chunk_end,
-                    'address': contract_address
-                })
-
-                # in chunk found this many addresses
-                print(f"Found {len(logs)} logs in chunk {block}-{chunk_end}")
-
+                response = requests.get(api_url, params=params)
+                data = response.json()
+                
+                if data['status'] != '1':
+                    print(f"\nError from Etherscan API: {data.get('message', 'Unknown error')}")
+                    break
+                
+                logs = data['result']
+                if not logs:
+                    break
+                
+                print(f"\nProcessing page {page} - Found {len(logs)} logs")
+                
                 for log in logs:
+                    topics = log['topics']
+                    event_sig = topics[0]
                     
-                    event_sig = log['topics'][0].hex()
-                    
-                    if event_sig in [event_signatures['RoleGranted'], event_signatures['RoleRevoked']]:
-                        role = log['topics'][1].hex()
-                        address = '0x' + log['topics'][2].hex()[-40:]  # Extract address from topic
-                        
-                        if role not in temp:
-                            temp[role] = []
-                        
-                        temp[role].append({
-                            'block': log['blockNumber'],
-                            'address': address.lower(),
-                            'action': Action.GRANTED.value if event_sig == event_signatures['RoleGranted'] else Action.REVOKED.value
-                        })
+                    if len(topics) >= 3:  # Make sure we have enough topics
+                        # Check if this is a role event we're interested in
+                        if event_sig in [EVENT_SIGNATURES['RoleGranted'], EVENT_SIGNATURES['RoleRevoked']]:
+                            role = topics[1]
+                            address = '0x' + topics[2][-40:]  # Extract address from topic
+                            
+                            if role not in temp:
+                                temp[role] = []
+                            
+                            temp[role].append({
+                                'block': int(log['blockNumber'], 16),  # Convert hex to int
+                                'address': address.lower(),
+                                'action': Action.GRANTED.value if event_sig == EVENT_SIGNATURES['RoleGranted'] else Action.REVOKED.value
+                            })
+                
+                page += 1
+                # Add delay to avoid rate limiting
+                time.sleep(0.2)
             
-            except Exception as e:
-                print(f"\nError processing chunk {block}-{chunk_end}: {str(e)}")
+            except requests.exceptions.RequestException as e:
+                print(f"\nError making request to Etherscan API: {str(e)}")
                 print("Retrying after a longer delay...")
-                time.sleep(5)  # Longer delay on error
+                time.sleep(5)
                 continue
             
-            # Add delay to avoid throttling
-            time.sleep(1)
-    
     except KeyboardInterrupt:
         print("\nProcess interrupted by user. Saving partial results...")
         return temp
@@ -130,35 +152,23 @@ def compute_final_state(temp: Dict) -> Dict:
 def main():
     try:
         args = parse_args()
-        print(f"\nStarting Access Control Scanner for contract: {args.contract_address}")
+        print(f"\nStarting Access Control Scanner (Etherscan API) for contract: {args.contract_address}")
         print(f"Chain: {args.chain_name}")
         
-        # Setup web3
-        rpc_url = get_rpc_url(args.chain_name)
-        w3 = Web3(Web3.HTTPProvider(rpc_url))
+        # Get API URL and key
+        api_url = get_etherscan_url(args.chain_name)
+        api_key = get_platform_key(args.chain_name)
         
-        if not w3.is_connected():
-            raise ConnectionError(f"Failed to connect to {args.chain_name}")
-        
-        print("Successfully connected to RPC endpoint")
-        
-        if not args.end_block:
-            args.end_block = w3.eth.block_number
-
-        # Get current block
-        
-        print(f"End block: {args.end_block}")
-        
-        # Get event signatures
-        event_signatures = get_event_signatures(w3)
+        if not api_key:
+            raise ValueError(f"No API key found for chain {args.chain_name}")
         
         # Process events
         temp = process_events(
-            w3,
+            api_url,
+            api_key,
             args.contract_address,
             args.starting_block,
-            args.end_block,
-            event_signatures
+            args.end_block
         )
         
         print("\nComputing final state...")
@@ -167,10 +177,10 @@ def main():
         
         # Write results to files
         print("\nWriting results to files...")
-        with open('temp_data.json', 'w') as f:
+        with open('temp_data_etherscan.json', 'w') as f:
             json.dump(temp, f, indent=2)
         
-        with open('final_state.json', 'w') as f:
+        with open('final_state_etherscan.json', 'w') as f:
             json.dump(result, f, indent=2)
         
         # Print results to command line
@@ -182,7 +192,7 @@ def main():
                 print(f"  - {addr}")
         
         print("\nProcess completed successfully!")
-        print("Results have been saved to 'temp_data.json' and 'final_state.json'")
+        print("Results have been saved to 'temp_data_etherscan.json' and 'final_state_etherscan.json'")
 
     except KeyboardInterrupt:
         print("\nProcess interrupted by user")
