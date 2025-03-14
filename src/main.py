@@ -73,7 +73,12 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         # TODO: retrieve variables from msg.sender condition 
 
         # list all state variables that are read
-        state_variables_read = [v.name for modifier in modifiers for v in modifier.all_variables_read() if v.name]
+        state_variables_read = [
+            v.name
+            for modifier in modifiers if modifier is not None
+            for v in modifier.all_variables_read() if v is not None and v.name
+        ]
+        
         all_state_variables_read.extend(state_variables_read)
 
         # 3) list all state variables that are written to inside this function
@@ -111,6 +116,7 @@ def main():
 
 
     for contract_address in contracts_addresses:
+        print(contract_address)
         temp_global = {}
         args = init_args(project_name, contract_address["address"], chain_name, rpc_url, platform_key)
         
