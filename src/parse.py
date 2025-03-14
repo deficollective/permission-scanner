@@ -56,13 +56,6 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
             etherscan_api_key=platform_key,
             export_dir=f'results/{project_name}'
         )
-    elif (chain_name == "mainnet"):
-        parser.set_defaults(
-            contract_source=f'mainet:{contract_address}',
-            rpc_url=rpc_url,
-            etherscan_api_key=platform_key,
-            export_dir=f'results/{project_name}'
-        )
     else:
         parser.set_defaults(
             contract_source=f'{chain_name}:{contract_address}',
@@ -75,3 +68,10 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
     cryticparser.init(parser)
 
     return parser.parse_args()
+
+
+# slither calls mainnet with one 'n'
+def chainNameParser(chain_name):
+    if (chain_name=="mainnet"):
+        return "mainet"
+    return chain_name

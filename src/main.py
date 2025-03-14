@@ -9,7 +9,7 @@ from typing import  List
 import urllib.error
 
 
-from parse import init_args
+from parse import init_args, chainNameParser
 from get_rpc_url import get_rpc_url
 from get_platform_key import get_platform_key
 from dotenv import load_dotenv
@@ -73,7 +73,12 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         # TODO: retrieve variables from msg.sender condition 
 
         # list all state variables that are read
-        state_variables_read = [v.name for modifier in modifiers for v in modifier.all_variables_read() if v.name]
+        state_variables_read = [
+            v.name
+            for modifier in modifiers if modifier is not None
+            for v in modifier.all_variables_read() if v is not None and v.name
+        ]
+        
         all_state_variables_read.extend(state_variables_read)
 
         # 3) list all state variables that are written to inside this function
@@ -102,7 +107,7 @@ def main():
     contracts_addresses = json_object["Contracts"]
     project_name = json_object["Project_Name"]
     
-    chain_name = json_object["Chain_Name"]
+    chain_name = chainNameParser(json_object["Chain_Name"])
     rpc_url = get_rpc_url(chain_name)
     platform_key = get_platform_key(chain_name)
 
@@ -111,6 +116,7 @@ def main():
 
 
     for contract_address in contracts_addresses:
+        print(contract_address)
         temp_global = {}
         args = init_args(project_name, contract_address["address"], chain_name, rpc_url, platform_key)
         
@@ -119,15 +125,19 @@ def main():
         try:
             slither = Slither(target, **vars(args))
         except urllib.error.HTTPError as e:
-            print(f"Failed to compile contract at {contract_address} due to HTTP error: {e}")
+            print(f"\033[33mFailed to compile contract at {contract_address} due to HTTP error: {e}\033[0m")
             continue  # Skip this contract and move to the next one
         except Exception as e:
-            print(f"An error occurred while analyzing {contract_address}: {e}")
+            print(f"\033[33mAn error occurred while analyzing {contract_address}: {e}\033[0m")
             continue
-        contracts = slither.contracts_derived
+
+        contracts = slither.contracts
 
         # only take the one contract that is in the key
         target_contract = [contract for contract in contracts if contract.name == contract_address["name"]]
+
+        if len(target_contract) == 0:
+            raise Exception(f"\033[31m\n \nThe contract name supplied in contract.json does not match any of the found contract names for this address: {contract_address}\033[0m")
         
         rpc_info = RpcInfo(args.rpc_url, "latest")
         srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
@@ -146,7 +156,7 @@ def main():
                 try:
                     contract_address["implementation_name"]
                 except KeyError:
-                    raise Exception(f'Proxy Contracts need a name for the implementation contract for contract {contract_address["address"]}. Please adhere to the template.')
+                    raise Exception(f'\033[31mProxy Contracts need a name for the implementation contract for contract {contract_address["address"]}. Please adhere to the template.\033[0m')
                 IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
                 raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
                 # switch to implementation address, for storage layout
@@ -200,10 +210,10 @@ def main():
         try:
             srs.walk_slot_info(srs.get_slot_values)
         except urllib.error.HTTPError as e:
-            print(f"Failed to fetch storage from contract at {contract_address} due to HTTP error: {e}")
+            print(f"\033[33mFailed to fetch storage from contract at {contract_address} due to HTTP error: {e}\033[0m")
             continue  # Skip this contract and move to the next one
         except Exception as e:
-            print(f"An error occurred while fetching storage slots from contract {contract_address}: {e}")
+            print(f"\033[33mAn error occurred while fetching storage slots from contract {contract_address}: {e}\033[0m")
             continue
         
 
