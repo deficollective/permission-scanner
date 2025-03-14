@@ -39,6 +39,7 @@ rpds-py==0.20.0
 slither-analyzer==0.10.4
 solc-select==1.0.4
 toolz==0.12.1
+tqdm==4.66.1
 typing_extensions==4.12.2
 urllib3==2.2.2
 wcwidth==0.2.13
