@@ -7,7 +7,7 @@ cbor2==5.6.4
 certifi==2024.8.30
 charset-normalizer==3.3.2
 ckzg==1.0.2
-crytic-compile==0.3.7
+crytic-compile==0.3.8
 cytoolz==0.12.3
 eth-account==0.11.3
 eth-hash==0.7.0
@@ -36,9 +36,10 @@ regex==2024.7.24
 requests==2.32.3
 rlp==4.0.1
 rpds-py==0.20.0
-slither-analyzer==0.10.4
+slither-analyzer==0.11.0
 solc-select==1.0.4
 toolz==0.12.1
+tqdm==4.67.1
 typing_extensions==4.12.2
 urllib3==2.2.2
 wcwidth==0.2.13
