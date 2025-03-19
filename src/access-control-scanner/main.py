@@ -11,6 +11,8 @@ from web3 import Web3
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from get_platform_key import get_platform_key
 
+from parse import chainNameParser
+
 # Event signatures
 ROLE_GRANTED_EVENT = "RoleGranted(bytes32,address,address)"
 ROLE_REVOKED_EVENT = "RoleRevoked(bytes32,address,address)"
@@ -66,6 +68,8 @@ def process_events(api_url: str, api_key: str, contract_address: str, start_bloc
                     'offset': offset,
                     'apikey': api_key
                 }
+
+                print(api_key)
                 
                 response = requests.get(api_url, params=params)
                 data = response.json()
@@ -157,7 +161,8 @@ def main():
         
         # Get API URL and key
         api_url = get_etherscan_url(args.chain_name)
-        api_key = get_platform_key(args.chain_name)
+        chain_name = chainNameParser(args.chain_name)
+        api_key = get_platform_key(chain_name)
         
         if not api_key:
             raise ValueError(f"No API key found for chain {args.chain_name}")
