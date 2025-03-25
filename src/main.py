@@ -9,7 +9,7 @@ from typing import  List
 import urllib.error
 
 
-from parse import init_args, chainNameParser
+from parse import init_args
 from get_rpc_url import get_rpc_url
 from get_platform_key import get_platform_key
 from dotenv import load_dotenv
@@ -27,8 +27,8 @@ def get_msg_sender_checks(function: Function) -> List[str]:
         + [m for f in function.all_internal_calls() if isinstance(f, Function) for m in f.modifiers]
         + [function]
         + [m for m in function.modifiers if isinstance(m, Function)]
-        + [call for (_, call) in function.all_library_calls() if isinstance(call, Function)]
-        + [m for (_, call) in function.all_library_calls() if isinstance(call, Function) for m in call.modifiers]
+        + [call for call in function.all_library_calls() if isinstance(call, Function)]
+        + [m for call in function.all_library_calls() if isinstance(call, Function) for m in call.modifiers]
     )
 
     all_nodes_ = [f.nodes for f in all_functions]
@@ -58,7 +58,7 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         for call in function.all_internal_calls():
             if isinstance(call, Function):
                 modifiers += call.modifiers
-        for (_, call) in function.all_library_calls():
+        for call in function.all_library_calls():
             if isinstance(call, Function):
                 modifiers += call.modifiers
         listOfModifiers = sorted([m.name for m in set(modifiers)])
@@ -107,16 +107,16 @@ def main():
     contracts_addresses = json_object["Contracts"]
     project_name = json_object["Project_Name"]
     
-    chain_name = chainNameParser(json_object["Chain_Name"])
+    chain_name = json_object["Chain_Name"]
     rpc_url = get_rpc_url(chain_name)
     platform_key = get_platform_key(chain_name)
 
     target_storage_vars = []
     result = {}
 
+    rpc_info = RpcInfo(rpc_url, "latest")
 
     for contract_address in contracts_addresses:
-        print(contract_address)
         temp_global = {}
         args = init_args(project_name, contract_address["address"], chain_name, rpc_url, platform_key)
         
@@ -139,7 +139,6 @@ def main():
         if len(target_contract) == 0:
             raise Exception(f"\033[31m\n \nThe contract name supplied in contract.json does not match any of the found contract names for this address: {contract_address}\033[0m")
         
-        rpc_info = RpcInfo(args.rpc_url, "latest")
         srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
         srs.unstructured = False
         # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
