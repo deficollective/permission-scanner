@@ -57,7 +57,7 @@ Then execute the scanner script with
 python src/main.py
 ```
 
-Note, if you don't have the correct `solc` compiler version, it will be installed automatically by the script.
+Note, if you don't have the correct `solc` compiler version, it will be installed automatically by the script with `solc_select`.
 
 The script will write the results of the scanner in a new file `./permissions.json`. See an existing example in the example folder.
 
@@ -69,29 +69,7 @@ source deactivate
 
 ## Supported Chains
 
-Supported chains to fetch and screen contracts from
-
-```json
-"mainnet:": (".etherscan.io", "etherscan.io")
-"optim:": ("-optimistic.etherscan.io", "optimistic.etherscan.io")
-"goerli:": ("-goerli.etherscan.io", "goerli.etherscan.io")
-"sepolia:": ("-sepolia.etherscan.io", "sepolia.etherscan.io")
-"tobalaba:": ("-tobalaba.etherscan.io", "tobalaba.etherscan.io")
-"bsc:": (".bscscan.com", "bscscan.com")
-"testnet.bsc:": ("-testnet.bscscan.com", "testnet.bscscan.com")
-"arbi:": (".arbiscan.io", "arbiscan.io")
-"testnet.arbi:": ("-testnet.arbiscan.io", "testnet.arbiscan.io")
-"poly:": (".polygonscan.com", "polygonscan.com")
-"mumbai:": ("-testnet.polygonscan.com", "testnet.polygonscan.com")
-"avax:": (".snowtrace.io", "snowtrace.io")
-"testnet.avax:": ("-testnet.snowtrace.io", "testnet.snowtrace.io")
-"ftm:": (".ftmscan.com", "ftmscan.com")
-"goerli.base:": ("-goerli.basescan.org", "goerli.basescan.org")
-"base:": (".basescan.org", "basescan.org")
-"gno:": (".gnosisscan.io", "gnosisscan.io")
-"polyzk:": ("-zkevm.polygonscan.com", "zkevm.polygonscan.com")
-"blast:": (".blastscan.io", "blastscan.io")
-```
+To match `contracts.json` chain field `"Chain_Name"`, check `get_rpc_url.py`. Make also sure to include a valid rpc url in the .env file.
 
 ## Limitations
 

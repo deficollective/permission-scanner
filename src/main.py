@@ -11,7 +11,7 @@ import urllib.error
 
 from parse import init_args
 from get_rpc_url import get_rpc_url
-from get_platform_key import get_platform_key
+from get_etherscan_url import get_etherscan_url
 from dotenv import load_dotenv
 
 
@@ -102,14 +102,15 @@ def main():
     load_dotenv()  # Load environment variables from .env file
 
     # load contracts from json
-    json_object = load_config_from_file("contracts.json")
+    config_json = load_config_from_file("contracts.json")
     
-    contracts_addresses = json_object["Contracts"]
-    project_name = json_object["Project_Name"]
+    contracts_addresses = config_json["Contracts"]
+    project_name = config_json["Project_Name"]
+    chain_name = config_json["Chain_Name"]
     
     chain_name = json_object["Chain_Name"]
     rpc_url = get_rpc_url(chain_name)
-    platform_key = get_platform_key(chain_name)
+    platform_key = get_etherscan_url()
 
     target_storage_vars = []
     result = {}
