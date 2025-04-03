@@ -45,4 +45,4 @@ urllib3==2.2.2
 wcwidth==0.2.13
 web3==6.20.3
 websockets==13.0.1
-yarl==1.11.1
+yarl==1.17.1
