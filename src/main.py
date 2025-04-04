@@ -108,7 +108,6 @@ def main():
     project_name = config_json["Project_Name"]
     chain_name = config_json["Chain_Name"]
     
-    chain_name = json_object["Chain_Name"]
     rpc_url = get_rpc_url(chain_name)
     platform_key = get_etherscan_url()
 
