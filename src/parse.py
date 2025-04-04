@@ -2,7 +2,7 @@ from crytic_compile import cryticparser
 from argparse import ArgumentParser, Namespace
 
 
-def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url: str, platform_key: str) -> Namespace:
+def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url: str, platform_key: str, contract_name: str) -> Namespace:
     """Parse the underlying arguments for the program.
     Returns:
         The arguments for the program.
@@ -33,7 +33,7 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
             contract_source=f'{chain_name}:{contract_address}',
             rpc_url=rpc_url,
             etherscan_api_key=platform_key,
-            export_dir=f'results/{project_name}'
+            export_dir=f'results/{project_name}/{contract_name}'
         )
 
     # requires a ArgumentParser instance
