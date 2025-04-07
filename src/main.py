@@ -13,6 +13,8 @@ from get_rpc_url import get_rpc_url
 from get_etherscan_url import get_etherscan_url
 from dotenv import load_dotenv
 
+from markdown_generator import generate_full_markdown
+
 
 def load_config_from_file(file_path: str) -> dict:
     with open(file_path, 'r') as file:
@@ -61,7 +63,30 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         for call in function.all_library_calls():
             if isinstance(call, Function):
                 modifiers += call.modifiers
+        print(function.name)
+        if (len(modifiers)>0):
+            try:
+                
+                a = modifiers[0]
+                
+                for expr in a.expressions:
+                    print("expr.context")
+                    print(expr.context)
+                    print("str(expr)")
+                    print(str(expr))
+                    
+                    print("expr.references")
+                    print(expr.references)
+                    print("expr.source_mapping")
+                    print(expr.source_mapping)
+                
+            except Exception as e:
+                print("Error ❌: ", e)
+            
         listOfModifiers = sorted([m.name for m in set(modifiers)])
+
+        for modi in listOfModifiers:
+            print(modi)
         
         # 2) detect conditions on msg.sender
         # in the full function scope
@@ -72,6 +97,7 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
             continue
 
         # list all state variables that are read
+        # the variables available in storage will be read
         state_variables_read = [
             v.name
             for modifier in modifiers if modifier is not None
@@ -155,7 +181,7 @@ def main():
         
         srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
         srs.unstructured = False
-        # Remove target prefix e.g. rinkeby:0x0 -> 0x0.
+        # Remove target prefix "mainnet:" e.g. mainnet:0x0 -> 0x0.
         address = target[target.find(":") + 1 :]
         srs.storage_address = address
 
@@ -165,8 +191,12 @@ def main():
         # step 3: read storage from proxy contract (location of storage) contract_address["address"]
 
         isProxy = False
+        uses_Access_Control = False
         
         for inheritedContract in target_contract[0].inheritance:
+            # if inheritedContract.name in ["AccessControl", "AccessControlEnumerable", "AccessControlDefaultAdminRules"]:
+            #     uses_Access_Control = True
+
             if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS", "UpgradeableProxy"]:
                 isProxy = True
                 try:
@@ -198,6 +228,15 @@ def main():
             temp_global["Address"] = contract_object["address"]
 
         # end setup
+        ##################################################
+        ##################################################
+        ##################################################
+
+        ##################################################
+        ##################################################
+        ##################################################
+        # start analysis
+
 
         # start analysis of main contract (can be proxy, then also the implementation contract is analysed)
         for i, contract in enumerate(target_contract):
@@ -206,7 +245,7 @@ def main():
 
         target_storage_vars = list(set(target_storage_vars)) # remove duplicates
 
-        # 3 steps to retrieve storage variables with slither
+        # Three steps to retrieve storage variables with slither
         # 1. set target variables
         # 2. compute storage keys
         # 3. retrieve slots from the keys
@@ -221,11 +260,9 @@ def main():
                 
                 # add all constant and immutable variable to a list to do the required look-up
                 if not var.is_stored:
-
-                    permissionedFunctions = temp_global["permissions"]
                     
-                    # contractDict["Functions"] is a list, functionData a dict
-                    for functionData in permissionedFunctions["Functions"]:
+                    # functionData is a dict
+                    for functionData in temp_global["permissions"]["Functions"]:
                         # check if e.g storage variable owner is part of this function 
                         if var.name in functionData["state_variables_read_inside_modifiers"]:
                             # check if already added some constants/immutables
@@ -289,7 +326,10 @@ def main():
     with open("permissions.json","w") as file:
         json.dump(result, file, indent=4)
 
+    content = generate_full_markdown("", contracts_addresses, result)
 
+    with open("markdown.md", "w") as file:
+        file.write(content)
 
 
 main()
