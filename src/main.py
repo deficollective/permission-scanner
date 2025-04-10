@@ -189,7 +189,6 @@ def main():
 
                 # scan the implementation address
                 slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
-                # rewrite target_contract
                 
                 # get all the instantiated contracts (includes also interacted contracts) from the implementation contract
                 implementation_contracts = slither.contracts_derived
@@ -202,6 +201,28 @@ def main():
                 temp_global["Implementation_Address"] = implementation_address
                 temp_global["Proxy_Address"] = contract_object["address"]
                 break
+
+            try:
+                if contract_object["implementation_name"] == "GovernorBravoDelegate":
+                    # get implementation address
+                    IMPLEMENTATION_SLOT = 2
+                    raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
+                    # parse raw value and convert to address
+                    implementation_address = srs.convert_value_to_type(raw_value, 160, 0, "address")
+
+                    slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
+                    implementation_contracts = slither.contracts_derived
+
+                    # find the instantiated/main implementation contract
+                    # user needs to supply the contract name of the instantiated contract in the contract object
+                    target_contract.extend([contract for contract in implementation_contracts if contract.name == contract_object["implementation_name"]])
+                    if len(target_contract) == 1:
+                        raise Exception(f"\033[31m\n \nThe implementation name supplied in contract.json does not match any of the found implementation contract names for this address: {contract_object['address']}\033[0m")
+                    temp_global["Implementation_Address"] = implementation_address
+                    temp_global["Proxy_Address"] = contract_object["address"]
+            except KeyError:
+                # not a Governor Bravo type contract
+                pass
 
         if not isProxy:
             temp_global["Address"] = contract_object["address"]
@@ -221,8 +242,6 @@ def main():
         for i, contract in enumerate(target_contract):
             # get permissions and store inside target_storage_vars
             get_permissions(contract, temp_global, target_storage_vars, isProxy, i)
-
-        print(temp_global)
 
         target_storage_vars = list(set(target_storage_vars)) # remove duplicates
 
