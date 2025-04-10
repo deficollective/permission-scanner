@@ -77,29 +77,32 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
 
         # list all state variables that are read
         # the variables available in storage will be read
-        state_variables_read = [
+        state_variables_read_inside_modifiers = [
             v.name
             for modifier in modifiers if modifier is not None
             for v in modifier.all_variables_read() if v is not None and v.name
         ]
         
-        all_state_variables_read.extend(state_variables_read)
+        all_state_variables_read.extend(state_variables_read_inside_modifiers)
+
+        state_variables_read_inside_function = [
+            v.name for v in function.all_state_variables_read() if v.name
+        ]
+
+        all_state_variables_read.extend(state_variables_read_inside_function)
 
         # 3) list all state variables that are written to inside this function
         state_variables_written = [
             v.name for v in function.all_state_variables_written() if v.name
         ]
 
-        # if internal function dont include in output
-        if function.name[0] == "_":
-            continue
 
         # 4) write everything to dict
         temp['Functions'].append({
             "Function": function.name,
             "Modifiers": listOfModifiers,
             "msg.sender_conditions": msg_sender_condition,
-            "state_variables_read_inside_modifiers": state_variables_read,
+            "state_variables_read": all_state_variables_read,
             "state_variables_written": state_variables_written
         })
     
@@ -219,6 +222,8 @@ def main():
             # get permissions and store inside target_storage_vars
             get_permissions(contract, temp_global, target_storage_vars, isProxy, i)
 
+        print(temp_global)
+
         target_storage_vars = list(set(target_storage_vars)) # remove duplicates
 
         # Three steps to retrieve storage variables with slither
@@ -240,7 +245,7 @@ def main():
                     # functionData is a dict
                     for functionData in temp_global["permissions"]["Functions"]:
                         # check if e.g storage variable owner is part of this function 
-                        if var.name in functionData["state_variables_read_inside_modifiers"]:
+                        if var.name in functionData["state_variables_read"]:
                             # check if already added some constants/immutables
 
                             # Ensure key exists
@@ -286,7 +291,7 @@ def main():
             # contractDict["Functions"] is a list, functionData a dict
             for functionData in contractDict["Functions"]:
                 # check if e.g storage variable owner is part of this function 
-                if value.name in functionData["state_variables_read_inside_modifiers"]:
+                if value.name in functionData["state_variables_read"]:
                     # if so, add a key value pair to the functionData object, to improve readability of report
                     functionData[value.name] = value.value
 
