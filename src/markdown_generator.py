@@ -56,47 +56,7 @@ def generate_permissions_table(permissions):
     return md_content
 
 def generate_full_markdown(protocol_metadata, contracts, permissions) -> str:
-    """
-    Generate the full markdown content including metadata, summary, overview, and tables.
-    """
-    metadata = "---\n"        
-    metadata+="protocol: insert the name\n"
-    metadata+="website: https://\n"
-    metadata+="x: https://x.com/...\n"
-    metadata+="github: https://github.com/\n"
-    metadata+="defillama_slug: []\n"
-    metadata+="chain: 'chain name'\n"
-    metadata+="stage: 0|1|2\n"
-    metadata+="reasons: []\n"
-    metadata+="risks: ['L','L','L','L','L']\n"
-    metadata+="author: ['author', 'co-author1', 'co-author2']\n"
-    metadata+="submission_date: '1970-01-01'\n"
-    metadata+="publish_date: '1970-01-01'\n"
-    metadata+="update_date: '1970-01-01'\n"
-    metadata+= "---\n"        
-            
-    summary = "# Summary\nAdd a summary of the protocols. What is it? What does it do? etc.\n"
-            
-    overview = "# Overview\n## Chain\n > Chain score: Low/Medium/High\n ## Upgradeability\n> Upgradeability score: Low/Medium/High\n## Autonomy\n> Autonomy score: Low/Medium/High\n## Exit Window\n> Exit Window score: Low/Medium/High\n## Accessibility\n> Accessibility score: Low/Medium/High\n "
-            
-    technical_analysis = "# Technical Analysis\n"
-
-    permission_owner = "## Permission Owners \n"
-    permission_owner += "| Name | Account | Type |\n"
-    permission_owner += "|-------------|------------|-------------------------|\n"
-    permission_owner += "|owner|0x|EOA/multisig/contract|\n"
     
-    technical_analysis_addition = "## Dependencies\n## Exit Window\n"
-            
-    security_council = "# Security Council\n"
-
-    security_council_table = "| ✅ /❌ | Requirement                                             |\n"
-    security_council_table += "| ------ | ------------------------------------------------------- |\n"
-    security_council_table += "| ❌     | At least 7 signers                                      |\n"
-    security_council_table += "| ❌     | At least 51% threshold                                  |\n"
-    security_council_table += "| ❌     | At least 50% non-insider signers                        |\n"
-    security_council_table += "| ❌     | Signers are publicly announced (with name or pseudonym) |\n"
-    
-    return f"{metadata}\n{summary}\n{overview}\n\n{technical_analysis}\n{permission_owner}\n{generate_contracts_table(contracts)}\n\n{generate_permissions_table(permissions)}\n{technical_analysis_addition}\n{security_council}\n{security_council_table}"
+    return f"{generate_contracts_table(contracts)}\n\n{generate_permissions_table(permissions)}"
 
 
