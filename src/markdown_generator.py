@@ -31,9 +31,10 @@ def generate_permissions_table(permissions):
                 try:
                     owner = permissioned_function['_owner']
                 except KeyError:
+                    owner = permissioned_function['Modifiers']
                     pass
-                # TODO: query etherscan for contract name of the address
-                md_content += f"| {contract_name} | {permissioned_function['Function']} | {permissioned_function['Modifiers']} | {owner} |\n"
+               
+                md_content += f"| {contract_name} | {permissioned_function['Function']} | ... | {owner} |\n"
         except KeyError:
             # just a normal contract
             pass
@@ -42,7 +43,15 @@ def generate_permissions_table(permissions):
         contract_name = proxy_permissions["Contract_Name"]
         permissioned_functions = proxy_permissions["Functions"]
         for permissioned_function in permissioned_functions:
-            md_content += f"| {contract_name} | {permissioned_function['Function']} | {permissioned_function['Modifiers']} | 'add owner' |\n"
+            owner = ""
+            try:
+                owner = permissioned_function['_owner']
+            except KeyError:
+                # no simple owner found
+                owner = permissioned_function['Modifiers']
+                pass
+            
+            md_content += f"| {contract_name} | {permissioned_function['Function']} | ... | {owner} |\n"
     
     return md_content
 

@@ -63,30 +63,9 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
         for call in function.all_library_calls():
             if isinstance(call, Function):
                 modifiers += call.modifiers
-        print(function.name)
-        if (len(modifiers)>0):
-            try:
-                
-                a = modifiers[0]
-                
-                for expr in a.expressions:
-                    print("expr.context")
-                    print(expr.context)
-                    print("str(expr)")
-                    print(str(expr))
-                    
-                    print("expr.references")
-                    print(expr.references)
-                    print("expr.source_mapping")
-                    print(expr.source_mapping)
-                
-            except Exception as e:
-                print("Error ❌: ", e)
-            
+
         listOfModifiers = sorted([m.name for m in set(modifiers)])
 
-        for modi in listOfModifiers:
-            print(modi)
         
         # 2) detect conditions on msg.sender
         # in the full function scope
@@ -191,11 +170,8 @@ def main():
         # step 3: read storage from proxy contract (location of storage) contract_address["address"]
 
         isProxy = False
-        uses_Access_Control = False
         
         for inheritedContract in target_contract[0].inheritance:
-            # if inheritedContract.name in ["AccessControl", "AccessControlEnumerable", "AccessControlDefaultAdminRules"]:
-            #     uses_Access_Control = True
 
             if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS", "UpgradeableProxy"]:
                 isProxy = True
