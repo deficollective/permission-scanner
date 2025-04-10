@@ -91,6 +91,12 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
 
         all_state_variables_read.extend(state_variables_read_inside_function)
 
+        # remove duplicates
+        all_state_variables_read_without_dups = []
+        for el in all_state_variables_read:
+            if el not in all_state_variables_read_without_dups:
+                all_state_variables_read_without_dups.append(el)
+        
         # 3) list all state variables that are written to inside this function
         state_variables_written = [
             v.name for v in function.all_state_variables_written() if v.name
@@ -102,7 +108,7 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
             "Function": function.name,
             "Modifiers": listOfModifiers,
             "msg.sender_conditions": msg_sender_condition,
-            "state_variables_read": all_state_variables_read,
+            "state_variables_read": all_state_variables_read_without_dups,
             "state_variables_written": state_variables_written
         })
     

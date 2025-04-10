@@ -8,7 +8,7 @@ def generate_contracts_table(contracts_object_list):
     for contract in contracts_object_list:
         md_content += f"| {contract['name']} | {contract['address']} |\n"
         try:
-            md_content += f"| {contract['implementation_name']} | {contract['address']} |\n"
+            md_content += f"| {contract['implementation_name']} | ... |\n"
         except KeyError:
             # not a proxy but a standard contract
             pass
