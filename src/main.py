@@ -82,33 +82,29 @@ def get_permissions(contract: Contract, result: dict, all_state_variables_read: 
             for modifier in modifiers if modifier is not None
             for v in modifier.all_variables_read() if v is not None and v.name
         ]
-        
-        all_state_variables_read.extend(state_variables_read_inside_modifiers)
 
         state_variables_read_inside_function = [
             v.name for v in function.all_state_variables_read() if v.name
         ]
-
-        all_state_variables_read.extend(state_variables_read_inside_function)
-
-        # remove duplicates
-        all_state_variables_read_without_dups = []
-        for el in all_state_variables_read:
-            if el not in all_state_variables_read_without_dups:
-                all_state_variables_read_without_dups.append(el)
         
+        all_state_variables_read_this_func = []
+        all_state_variables_read_this_func.extend(state_variables_read_inside_modifiers)
+        all_state_variables_read_this_func.extend(state_variables_read_inside_function)
+        all_state_variables_read_this_func = list(set(all_state_variables_read_this_func))
+
+        all_state_variables_read.extend(all_state_variables_read_this_func)
+
         # 3) list all state variables that are written to inside this function
         state_variables_written = [
             v.name for v in function.all_state_variables_written() if v.name
         ]
-
 
         # 4) write everything to dict
         temp['Functions'].append({
             "Function": function.name,
             "Modifiers": listOfModifiers,
             "msg.sender_conditions": msg_sender_condition,
-            "state_variables_read": all_state_variables_read_without_dups,
+            "state_variables_read": all_state_variables_read_this_func,
             "state_variables_written": state_variables_written
         })
     
@@ -134,13 +130,13 @@ def main():
     rpc_url = get_rpc_url(chain_name)
     platform_key = get_etherscan_url()
 
-    target_storage_vars = []
     result = {}
 
     # instantiate slither rpc class
     rpc_info = RpcInfo(rpc_url, "latest")
 
     for contract_object in contracts_addresses:
+        target_storage_vars = [] # target storage variables of this contract
         temp_global = {}
 
         # setup args for slither
