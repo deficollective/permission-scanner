@@ -4,14 +4,12 @@ from enum import Enum
 from typing import Dict, List
 import sys
 import time
-from tqdm import tqdm
 import os
 import requests
 from web3 import Web3
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from get_platform_key import get_platform_key
 
-from parse import chainNameParser
 
 # Event signatures
 ROLE_GRANTED_EVENT = "RoleGranted(bytes32,address,address)"
@@ -33,21 +31,15 @@ class Action(Enum):
 def parse_args():
     parser = argparse.ArgumentParser(description='Access Control Scanner (Etherscan API)')
     parser.add_argument('--contract_address', required=True, help='Contract address to scan')
-    parser.add_argument('--chain_name', required=True, help='Chain name')
+    parser.add_argument('--chain_id', required=True, help='Chain id (look up on chainlist.org)')
     parser.add_argument('--starting_block', type=int, required=True, help='Starting block number')
     parser.add_argument('--end_block', type=int, help='End block number (defaults to current block)')
     return parser.parse_args()
 
-def get_etherscan_url(chain_name: str) -> str:
-    urls = {
-        "mainnet": "https://api.etherscan.io/api",
-        "optim": "https://api-optimistic.etherscan.io/api",
-        "base": "https://api.basescan.org/api",
-        "poly": "https://api.polygonscan.com/api"
-    }
-    return urls.get(chain_name, "https://api.etherscan.io/api")
+def get_etherscan_url() -> str:
+    return "https://api.etherscan.io/v2/api"
 
-def process_events(api_url: str, api_key: str, contract_address: str, start_block: int, end_block: int) -> Dict:
+def process_events(api_url: str, api_key: str, contract_address: str, chain_id: int, start_block: int, end_block: int) -> Dict:
     temp: Dict[str, List[Dict]] = {}
     page = 1
     offset = 1000  # Number of records per page
@@ -59,6 +51,7 @@ def process_events(api_url: str, api_key: str, contract_address: str, start_bloc
         while True:
             try:
                 params = {
+                    'chainid': chain_id,
                     'module': 'logs',
                     'action': 'getLogs',
                     'address': contract_address,
@@ -157,12 +150,11 @@ def main():
     try:
         args = parse_args()
         print(f"\nStarting Access Control Scanner (Etherscan API) for contract: {args.contract_address}")
-        print(f"Chain: {args.chain_name}")
+        print(f"Chain: {args.chain_id}")
         
         # Get API URL and key
-        api_url = get_etherscan_url(args.chain_name)
-        chain_name = chainNameParser(args.chain_name)
-        api_key = get_platform_key(chain_name)
+        api_url = get_etherscan_url()
+        api_key = get_platform_key()
         
         if not api_key:
             raise ValueError(f"No API key found for chain {args.chain_name}")
@@ -172,6 +164,7 @@ def main():
             api_url,
             api_key,
             args.contract_address,
+            args.chain_id,
             args.starting_block,
             args.end_block
         )

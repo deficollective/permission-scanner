@@ -68,10 +68,3 @@ def init_args(project_name: str, contract_address: str, chain_name: str, rpc_url
     cryticparser.init(parser)
 
     return parser.parse_args()
-
-
-# slither calls mainnet with one 'n'
-def chainNameParser(chain_name):
-    if (chain_name=="mainnet"):
-        return "mainet"
-    return chain_name
