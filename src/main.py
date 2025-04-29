@@ -308,11 +308,10 @@ def main():
 
         if len(storageValues.values()):
             contractDict["storage_values"] = storageValues
-
-        try:
-            if implementation_name:
-                result[implementation_name] = temp_global
-        except Exception:
+    
+        if len(implementation_name) > 0:
+            result[implementation_name] = temp_global
+        else:
             result[contract_name] = temp_global
 
     with open("permissions.json","w") as file:

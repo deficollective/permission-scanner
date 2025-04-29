@@ -35,14 +35,6 @@ Create a file called `./contracts.json` with the chain name, project name and ad
 
 > If the documentation of the project you are scanning includes two addresses (proxy and implementation) just include the proxy contract address.
 
-Example:
-
-```json
-{
-  "address": "0xb62bdb1a6ac97a9b70957dd35357311e8859f0d7"
-}
-```
-
 The name of the implementation contract can be retrieved e.g on etherscan, when clicking on the address of the implementation and check the contracts tab of this.
 
 ![Etherscan](example/etherscan.png)
