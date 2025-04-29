@@ -6,7 +6,6 @@ def get_rpc_url(network: str) -> str:
         "bsc": os.getenv("BSC_RPC"),
         "poly": os.getenv("POLYGON_RPC"),
         "polyzk": os.getenv("POLYGON_ZK_RPC"),
-        "cardona.polyzk": os.getenv("CARDONA_POLY_ZK_RPC"),
         "base": os.getenv("BASE_RPC"),
         "arbi": os.getenv("ARBITRUM_RPC"),
         "nova.arbi": os.getenv("NOVA_ARBITRUM_RPC"),
@@ -46,7 +45,6 @@ def get_chain_id(network: str) -> int:
         "bsc": 56,
         "poly": 137,
         "polyzk": 1101,
-        "cardona.polyzk": 1101,  # Assuming same as polyzk
         "base": 8453,
         "arbi": 42161,
         "nova.arbi": 42170,

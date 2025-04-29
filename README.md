@@ -4,7 +4,10 @@ The permission scanner allows scanning a DeFi protocol, or any smart contract sy
 
 ## How it works
 
-In order to scan a protocol for permissioned functions, the target protocol is specified in terms of the chain and a set of addresses of all deployed contracts. These contracts all have to be verified on a public block explorer. You can find a list of supported chains and explorers [here](#supported-chains). The permission scanner then downloads the source code of the contracts from the explorer, scans these for permissions, reads the permission owner from the respective storage slot, and writes the results in an output file.
+1. In order to scan a protocol for permissioned functions, the target protocol is specified in terms of the chain and a set of addresses of all deployed contracts.
+2. These contracts all have to be verified on a public block explorer.
+3. You can find a list of supported chains and explorers [here](#supported-chains).
+4. The permission scanner then downloads the source code of the contracts from the explorer, scans these for permissions, reads the permission owner from the respective storage slot, and writes the results in an output file.
 
 ## Prerequisites
 
@@ -14,6 +17,8 @@ In order to scan a protocol for permissioned functions, the target protocol is s
 - A valid RPC api key, e.g Infura or Alchemy (see env variables)
 
 ## Getting started
+
+### Setup Environment and dependencies
 
 Create and activate a virtual Python environment, and install the required Python packages with
 
@@ -25,29 +30,35 @@ pip install -r requirements.txt
 
 Copy the `.env.example` file to `.env` and, depending on the network where the contracts are deployed on, fill in your RPC provider's url and a valid block explorer api key. Then load the variables with
 
+💡 Note that etherscan migrated the API to v2, and a etherscan v2 api key, allows to query different blockchains.
+
 ```shell
 source .env
 ```
 
-Create a file called `./contracts.json` with the chain name, project name and addresses of all contracts of the protocol. Find a list of supported chains [here](#supported-chains). See an existing `example` at `./example/contracts.json` on how to specify the input for the scanner.
+### Create `contracts.json` file
 
-> See an existing `example` at `./example/contracts.json` on how to specify the input for the scanner
+1. Create a file called `./contracts.json`
+2. Add chain name, project name
+3. Add addresses to array
 
-> If the documentation of the project you are scanning includes two addresses (proxy and implementation) just include the proxy contract address.
+💡 See also the example file at `./example/contracts.json` on how to specify the input for the scanner
 
-The name of the implementation contract can be retrieved e.g on etherscan, when clicking on the address of the implementation and check the contracts tab of this.
+> If the documentation of the project you are scanning includes two addresses (proxy and implementation) just include the proxy contract address, the script will find the implementation address.
 
-![Etherscan](example/etherscan.png)
-
-Then execute the scanner script with
+Then execute the scanner script with 🚀
 
 ```shell
 python src/main.py
 ```
 
+### Results
+
 Note, if you don't have the correct `solc` compiler version, it will be installed automatically by the script with `solc_select`.
 
 The script will write the results of the scanner in a new file `./permissions.json`. See an existing example in the example folder.
+
+Additionally it will create a `markdown.md` which serves as a starting point to write a report for defiscan.
 
 Once you have your analysis completed, you can deactivate the Pyhton environment again with the following command
 
@@ -57,7 +68,39 @@ source deactivate
 
 ## Supported Chains
 
-To match `contracts.json` chain field `"Chain_Name"`, check `get_rpc_url.py`. Make also sure to include a valid rpc url in the .env file.
+To match `contracts.json` chain field `"Chain_Name"`, check this list. Make also sure to include a valid rpc url in the .env file.
+
+```json
+chain_ids = {
+    "mainnet": 1,
+    "bsc": 56,
+    "poly": 137,
+    "polyzk": 1101,
+    "base": 8453,
+    "arbi": 42161,
+    "nova.arbi": 42170,
+    "linea": 59144,
+    "ftm": 250,
+    "blast": 81457,
+    "optim": 10,
+    "avax": 43114,
+    "bttc": 199,
+    "celo": 42220,
+    "cronos": 25,
+    "frax": 252,
+    "gno": 100,
+    "kroma": 255,
+    "mantle": 5000,
+    "moonbeam": 1284,
+    "moonriver": 1285,
+    "opbnb": 204,
+    "scroll": 534352,
+    "taiko": 167000,
+    "wemix": 1111,
+    "era.zksync": 324,
+    "xai": 660279,
+}
+```
 
 ## Limitations
 
