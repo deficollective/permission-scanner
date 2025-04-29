@@ -33,16 +33,12 @@ Create a file called `./contracts.json` with the chain name, project name and ad
 
 > See an existing `example` at `./example/contracts.json` on how to specify the input for the scanner
 
-> Note in the `contracts.json` file the contract names have to exactly match otherwise the contracts are not included in the output successfully.
-
-> If one contract is a proxy, please also specify the implementation contract name to compile the output, the implementation contract address is not required.
+> If the documentation of the project you are scanning includes two addresses (proxy and implementation) just include the proxy contract address.
 
 Example:
 
 ```json
 {
-  "name": "ERC1967Proxy",
-  "implementation_name": "VaultManagerV5",
   "address": "0xb62bdb1a6ac97a9b70957dd35357311e8859f0d7"
 }
 ```

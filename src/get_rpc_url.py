@@ -40,3 +40,39 @@ def get_rpc_url(network: str) -> str:
     return rpc_url
 
 
+def get_chain_id(network: str) -> int:
+    chain_ids = {
+        "mainnet": 1,
+        "bsc": 56,
+        "poly": 137,
+        "polyzk": 1101,
+        "cardona.polyzk": 1101,  # Assuming same as polyzk
+        "base": 8453,
+        "arbi": 42161,
+        "nova.arbi": 42170,
+        "linea": 59144,
+        "ftm": 250,
+        "blast": 81457,
+        "optim": 10,
+        "avax": 43114,
+        "bttc": 199,
+        "celo": 42220,
+        "cronos": 25,
+        "frax": 252,
+        "gno": 100,
+        "kroma": 255,
+        "mantle": 5000,
+        "moonbeam": 1284,
+        "moonriver": 1285,
+        "opbnb": 204,
+        "scroll": 534352,
+        "taiko": 167000,
+        "wemix": 1111,
+        "era.zksync": 324,
+        "xai": 660279,
+    }
+
+    if network not in chain_ids:
+        raise ValueError(f"Unknown network name: {network}")
+
+    return chain_ids[network]

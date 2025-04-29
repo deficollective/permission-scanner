@@ -9,9 +9,11 @@ from typing import  List
 import urllib.error
 
 from parse import init_args
-from get_rpc_url import get_rpc_url
-from get_etherscan_url import get_etherscan_url
+from get_rpc_url import get_rpc_url, get_chain_id
+from etherscan import get_etherscan_url, fetch_contract_metadata
 from dotenv import load_dotenv
+
+import re
 
 from markdown_generator import generate_full_markdown
 
@@ -20,6 +22,9 @@ def load_config_from_file(file_path: str) -> dict:
     with open(file_path, 'r') as file:
         return json.load(file)
 
+
+def is_valid_eth_address(address: str) -> bool:
+    return bool(re.fullmatch(r"0x[a-fA-F0-9]{40}", address))
 
 # check for msg.sender checks
 def get_msg_sender_checks(function: Function) -> List[str]:
@@ -124,6 +129,7 @@ def main():
     config_json = load_config_from_file("contracts.json")
     
     contracts_addresses = config_json["Contracts"]
+    contract_data_for_markdown = []
     project_name = config_json["Project_Name"]
     chain_name = config_json["Chain_Name"]
     
@@ -135,21 +141,43 @@ def main():
     # instantiate slither rpc class
     rpc_info = RpcInfo(rpc_url, "latest")
 
-    for contract_object in contracts_addresses:
+    for contract_address in contracts_addresses:
+        contract_result = fetch_contract_metadata(address=contract_address, apikey=platform_key, chainid=get_chain_id(chain_name))
+        contract_name = contract_result["ContractName"]
+        isProxy = contract_result["Proxy"] == 1
+        implementation_address = contract_result["Implementation"]
+        implementation_name = ""
+        contract_data_for_markdown.append({"name": contract_name, "address": contract_address})
+        
+        if isProxy and implementation_address:
+            if not isinstance(implementation_address, str) or not is_valid_eth_address(implementation_address):
+                raise ValueError(f"Invalid implementation address for proxy: {implementation_address}")
+            try:
+                implementation_result = fetch_contract_metadata(
+                    address=implementation_address,
+                    apikey=platform_key,
+                    chainid=get_chain_id(chain_name)
+                )
+                implementation_name = implementation_result.get("ContractName") or ""
+                contract_data_for_markdown.append({"name": implementation_name, "address": implementation_address})
+            except Exception as e:
+                raise f"Failed to get Implementation contract from Etherscan. \n\n\n  + {e}"
+        
+
         target_storage_vars = [] # target storage variables of this contract
         temp_global = {}
 
         # setup args for slither
-        args = init_args(project_name, contract_object["address"], chain_name, rpc_url, platform_key, contract_object["name"])
+        args = init_args(project_name, contract_address, chain_name, rpc_url, platform_key, contract_name)
         target = args.contract_source
         
         try:
             slither = Slither(target, **vars(args))
         except urllib.error.HTTPError as e:
-            print(f"\033[33mFailed to compile contract at {contract_object} due to HTTP error: {e}\033[0m")
+            print(f"\033[33mFailed to compile contract at {contract_address} due to HTTP error: {e}\033[0m")
             continue  # Skip this contract and move to the next one
         except Exception as e:
-            print(f"\033[33mAn error occurred while analyzing {contract_object}: {e}\033[0m")
+            print(f"\033[33mAn error occurred while analyzing {contract_address}: {e}\033[0m")
             continue
 
         # retrieved contracts from the address (inherited and interacted contracts)
@@ -158,10 +186,10 @@ def main():
         # only take the one contract that is in the key
         # this filters out interacted contracts (we dont need the permissions of them)
         # does not exclude inherited contracts
-        target_contract = [contract for contract in contracts if contract.name == contract_object["name"]]
+        target_contract = [contract for contract in contracts if contract.name == contract_name]
 
         if len(target_contract) == 0:
-            raise Exception(f"\033[31m\n \nThe contract name supplied in contract.json does not match any of the found contract names for this address: {contract_object}\033[0m")
+            raise Exception(f"\033[31m\n \nThe contract name supplied in contract.json does not match any of the found contract names for this address: {contract_address}\033[0m")
         
         srs = SlitherReadStorage(target_contract, args.max_depth, rpc_info)
         srs.unstructured = False
@@ -169,65 +197,27 @@ def main():
         address = target[target.find(":") + 1 :]
         srs.storage_address = address
 
-        # step 1: check if inheriting a proxy pattern (go through all inherited contracts)
-        # step 2: create slither object again, but with implementation address
-        #    -> run analysis of storage layout and permissions of implementation address
-        # step 3: read storage from proxy contract (location of storage) contract_address["address"]
+        if isProxy:
+            # step 1: create slither object again, but with implementation address
+            #    -> run analysis of storage layout and permissions of implementation address
+            # step 2: read storage from proxy contract (location of storage) contract_address["address"]
 
-        isProxy = False
-        
-        for inheritedContract in target_contract[0].inheritance:
+            # scan the implementation address
+            slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
+            
+            # get all the instantiated contracts (includes also interacted contracts) from the implementation contract
+            implementation_contracts = slither.contracts_derived
 
-            if inheritedContract.name in ["Proxy", "ERC1967Proxy", "ERC1967", "UUPS", "UpgradeableProxy"]:
-                isProxy = True
-                try:
-                    contract_object["implementation_name"]
-                except KeyError:
-                    raise Exception(f'\033[31mProxy Contracts need a name for the implementation contract for contract {contract_object["address"]}. Please adhere to the template.\033[0m')
-                IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
-                raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
-                # parse raw value and convert to address
-                implementation_address = srs.convert_value_to_type(raw_value, 160, 0, "address")
-
-                # scan the implementation address
-                slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
-                
-                # get all the instantiated contracts (includes also interacted contracts) from the implementation contract
-                implementation_contracts = slither.contracts_derived
-
-                # find the instantiated/main implementation contract
-                # user needs to supply the contract name of the instantiated contract in the contract object
-                target_contract.extend([contract for contract in implementation_contracts if contract.name == contract_object["implementation_name"]])
-                if len(target_contract) == 1:
-                    raise Exception(f"\033[31m\n \nThe implementation name supplied in contract.json does not match any of the found implementation contract names for this address: {contract_object['address']}\033[0m")
-                temp_global["Implementation_Address"] = implementation_address
-                temp_global["Proxy_Address"] = contract_object["address"]
-                break
-
-            try:
-                if contract_object["implementation_name"] == "GovernorBravoDelegate":
-                    # get implementation address
-                    IMPLEMENTATION_SLOT = 2
-                    raw_value = get_storage_data(srs.rpc_info.web3, srs.checksum_address, IMPLEMENTATION_SLOT, srs.rpc_info.block)
-                    # parse raw value and convert to address
-                    implementation_address = srs.convert_value_to_type(raw_value, 160, 0, "address")
-
-                    slither = Slither(f'{chain_name}:{implementation_address}', **vars(args))
-                    implementation_contracts = slither.contracts_derived
-
-                    # find the instantiated/main implementation contract
-                    # user needs to supply the contract name of the instantiated contract in the contract object
-                    target_contract.extend([contract for contract in implementation_contracts if contract.name == contract_object["implementation_name"]])
-                    if len(target_contract) == 1:
-                        raise Exception(f"\033[31m\n \nThe implementation name supplied in contract.json does not match any of the found implementation contract names for this address: {contract_object['address']}\033[0m")
-                    temp_global["Implementation_Address"] = implementation_address
-                    temp_global["Proxy_Address"] = contract_object["address"]
-            except KeyError:
-                # not a Governor Bravo type contract
-                pass
+            # find the instantiated/main implementation contract
+            
+            target_contract.extend([contract for contract in implementation_contracts if contract.name == implementation_name])
+            if len(target_contract) == 1:
+                raise Exception(f"\033[31m\n \nThe implementation name supplied in contract.json does not match any of the found implementation contract names for this address: {contract_address['address']}\033[0m")
+            temp_global["Implementation_Address"] = implementation_address
+            temp_global["Proxy_Address"] = contract_address
 
         if not isProxy:
-            temp_global["Address"] = contract_object["address"]
+            temp_global["Address"] = contract_address
 
         # end setup
         ##################################################
@@ -277,7 +267,7 @@ def main():
                             if var.expression and str(var.expression) != "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc":
                                 try:
                                     raw_value = get_storage_data(
-                                        srs.rpc_info.web3, contract_object["address"], 
+                                        srs.rpc_info.web3, contract_address, 
                                         str(var.expression), srs.rpc_info.block
                                     )
                                     value = srs.convert_value_to_type(raw_value, 160, 0, "address")
@@ -298,10 +288,10 @@ def main():
         try:
             srs.walk_slot_info(srs.get_slot_values)
         except urllib.error.HTTPError as e:
-            print(f"\033[33mFailed to fetch storage from contract at {contract_object} due to HTTP error: {e}\033[0m")
+            print(f"\033[33mFailed to fetch storage from contract at {contract_address} due to HTTP error: {e}\033[0m")
             continue  # Skip this contract and move to the next one
         except Exception as e:
-            print(f"\033[33mAn error occurred while fetching storage slots from contract {contract_object}: {e}\033[0m")
+            print(f"\033[33mAn error occurred while fetching storage slots from contract {contract_address}: {e}\033[0m")
             continue
         
         storageValues = {}
@@ -320,15 +310,15 @@ def main():
             contractDict["storage_values"] = storageValues
 
         try:
-            if contract_object["implementation_name"]:
-                result[contract_object["implementation_name"]] = temp_global
+            if implementation_name:
+                result[implementation_name] = temp_global
         except Exception:
-            result[contract_object["name"]] = temp_global
+            result[contract_name] = temp_global
 
     with open("permissions.json","w") as file:
         json.dump(result, file, indent=4)
 
-    content = generate_full_markdown("", contracts_addresses, result)
+    content = generate_full_markdown("", contract_data_for_markdown, result)
 
     with open("markdown.md", "w") as file:
         file.write(content)
