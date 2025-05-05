@@ -8,4 +8,7 @@ src/__pycache__
 /results
 # markdown generation outputs
 *.md
-*.json
+
+.venv
+logs
+.cursor

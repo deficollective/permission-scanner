@@ -1,0 +1,4 @@
+{
+  "mainnet": { "base_url": "https://api.etherscan.io/v2/api", "chainid": 1 },
+  "bsc": { "base_url": "https://api.etherscan.io/v2/api", "chainid": 56 }
+}
