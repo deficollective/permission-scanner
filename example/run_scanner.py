@@ -69,11 +69,14 @@ def main():
 
         report_dir = f"{export_dir}/{project_name}-reports"
         os.makedirs(report_dir, exist_ok=True)
-        json_path = os.path.join(report_dir, "permissions.json")
+        permissions_json_path = os.path.join(report_dir, "permissions.json")
         markdown_path = os.path.join(report_dir, "markdown.md")
 
-        with open(json_path, "w") as f:
+        # save permissions.json
+        with open(permissions_json_path, "w") as f:
             json.dump(all_scan_results, f, indent=4)
+
+        # save markdown.md
         markdown_content = generate_full_markdown(
             project_name, all_contract_data_for_markdown, all_scan_results
         )
