@@ -1,10 +1,13 @@
 import json
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional, Union
 import urllib.error
 import os
 import re
+from enum import Enum
+from dataclasses import dataclass
+import subprocess
 
-from slither.slither import Slither
+from slither import Slither
 from slither.core.declarations.function import Function
 from slither.core.declarations.contract import Contract
 from slither.tools.read_storage.read_storage import (
@@ -14,17 +17,19 @@ from slither.tools.read_storage.read_storage import (
 )
 
 from ..utils.block_explorer import BlockExplorer
-from ..utils.logger import setup_logger
 from ..utils.markdown_generator import generate_full_markdown
-
-logger = setup_logger(__name__, "logs/scanner_new.log")
 
 
 class ContractScanner:
     """Service for scanning smart contracts for permissions and storage."""
 
     def __init__(
-        self, rpc_url: str, block_explorer: BlockExplorer, export_dir: str = "results"
+        self,
+        # block_explorer: BlockExplorer,
+        block_explorer_api_key: str,
+        rpc_url: str,
+        address: str,
+        export_dir: str = "results",
     ):
         """Initialize the ContractScanner.
 
@@ -33,22 +38,24 @@ class ContractScanner:
             block_explorer (BlockExplorer): The block explorer instance for fetching contract metadata
             export_dir (str): Directory to save Solidity files and crytic_compile.config.json
         """
+        # self.block_explorer = block_explorer
+        self.block_explorer_api_key = block_explorer_api_key
         self.rpc_url = rpc_url
-        self.block_explorer = block_explorer
-        self.slither = None
-        self.storage_reader = None
+        self.address = address
         self.export_dir = export_dir
+        self.permissions_results = {}
+        self.target_storage_vars = []
         self.contract_data_for_markdown = []
-        self.scan_results = {}
-        logger.info("Initialized ContractScanner")
+        self.scan_result = {}
+        self.implementation_name = None
 
     @staticmethod
-    def is_valid_eth_address(address: str) -> bool:
+    def _is_valid_eth_address(address: str) -> bool:
         """Check if a string is a valid Ethereum address."""
         return bool(re.fullmatch(r"0x[a-fA-F0-9]{40}", address))
 
     @staticmethod
-    def get_msg_sender_checks(function: Function) -> List[str]:
+    def _get_msg_sender_checks(function: Function) -> List[str]:
         """Get all msg.sender checks in a function and its internal calls."""
         all_functions = (
             [f for f in function.all_internal_calls() if isinstance(f, Function)]
@@ -86,24 +93,81 @@ class ContractScanner:
         ]
         return all_conditional_nodes_on_msg_sender
 
-    def get_permissions(
-        self,
-        contract: Contract,
-        result: Dict[str, Any],
-        all_state_variables_read: List[str],
-        is_proxy: bool,
-        index: int,
-    ) -> None:
+    def _extract_solidity_version(
+        self, contract_path: str, default_version: str = "0.7.6"
+    ) -> str:
+        """Extract Solidity version from contract's pragma statement.
+
+        Args:
+            contract_path (str): Path to the contract file
+
+        Returns:
+            str: Solidity version (e.g. "0.4.24")
+        """
+        try:
+            with open(contract_path, "r") as f:
+                content = f.read()
+                # Match pragma solidity statements like:
+                # pragma solidity ^0.4.24;
+                # pragma solidity 0.4.24;
+                # pragma solidity >=0.4.24 <0.5.0;
+                match = re.search(
+                    r"pragma\s+solidity\s+(\^?[0-9]+\.[0-9]+\.[0-9]+)", content
+                )
+                if match:
+                    return match.group(1).replace("^", "")
+                return default_version  # Default version if not found
+        except Exception as e:
+            return default_version  # Default version on error
+
+    def _switch_solidity_version(self, version: str) -> None:
+        """Switch to the specified Solidity version using solc-select.
+
+        Args:
+            version (str): Solidity version to switch to
+        """
+        try:
+            current_version_info = subprocess.run(
+                ["solc", "--version"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,
+            )
+            if version in current_version_info.stdout:
+                return
+            subprocess.run(["solc-select", "use", version], check=True)
+        except subprocess.CalledProcessError as e:
+            raise f"Failed to switch Solidity version to {version}: {e}"
+
+    def _get_contract(self, address: str) -> Contract:
+        """Get a contract from the block explorer and initialize Slither.
+
+        Args:
+            address (str): The contract address to fetch
+
+        Returns:
+            tuple: (contract_metadata, main_contract_path)
+        """
+        contract_metadata = self.block_explorer.get_contract_metadata(address)
+        # contract_save_dir = os.path.join(
+        #     self.export_dir, contract_metadata["ContractName"]
+        # )
+        # os.makedirs(contract_save_dir, exist_ok=True)
+        main_contract_path = self.block_explorer.save_sourcecode(
+            address, self.export_dir
+        )
+        return contract_metadata, main_contract_path
+
+    def _scan_permissions(self, contract: Contract) -> Dict[str, Any]:
         """Analyze permissions in a contract and store results.
 
         Args:
             contract (Contract): The contract to analyze
-            result (Dict[str, Any]): Dictionary to store results
             all_state_variables_read (List[str]): List of state variables read
             is_proxy (bool): Whether the contract is a proxy
             index (int): Index for proxy/implementation contract
         """
-        temp = {"Contract_Name": contract.name, "Functions": []}
+        result_dict = {"Contract_Name": contract.name, "Functions": []}
 
         for function in contract.functions:
             # Get all modifiers
@@ -118,7 +182,7 @@ class ContractScanner:
             list_of_modifiers = sorted([m.name for m in set(modifiers)])
 
             # Get msg.sender conditions
-            msg_sender_condition = self.get_msg_sender_checks(function)
+            msg_sender_condition = self._get_msg_sender_checks(function)
 
             if len(modifiers) == 0 and len(msg_sender_condition) == 0:
                 continue
@@ -147,7 +211,7 @@ class ContractScanner:
                 set(all_state_variables_read_this_func)
             )
 
-            all_state_variables_read.extend(all_state_variables_read_this_func)
+            self.target_storage_vars.extend(all_state_variables_read_this_func)
 
             # Get state variables written
             state_variables_written = [
@@ -155,7 +219,7 @@ class ContractScanner:
             ]
 
             # Store results
-            temp["Functions"].append(
+            result_dict["Functions"].append(
                 {
                     "Function": function.name,
                     "Modifiers": list_of_modifiers,
@@ -165,186 +229,46 @@ class ContractScanner:
                 }
             )
 
-        # Store in result dict
-        if is_proxy and index == 0:
-            result["proxy_permissions"] = temp
-        elif is_proxy and index == 1:
-            result["permissions"] = temp
-        else:
-            result["permissions"] = temp
+        return result_dict
 
-    def scan_contract(self, address: str) -> Dict[str, Any]:
-        """Scan a contract for permissions and storage.
+    def _scan_storage(
+        self,
+        storage_scanner: SlitherReadStorage,
+        permissions_result: Dict[str, Any],
+        contract_address: str,
+    ) -> Dict[str, Any]:
+        """Scan contract storage.
 
         Args:
-            address (str): The contract address to scan
+            storage_scanner (SlitherReadStorage): Initialized storage scanner
+            permissions_result (Dict[str, Any]): Results from permission scan
+            contract_address (str): Contract address to scan
 
         Returns:
-            Dict[str, Any]: The scan results for this contract
+            Dict[str, Any]: Storage analysis results
         """
-        logger.info(f"Starting scan for contract at {address}")
-
-        try:
-            # Fetch contract metadata
-            contract_result = self.block_explorer.fetch_contract_metadata(address)
-            contract_name = contract_result["ContractName"]
-            is_proxy = contract_result["Proxy"] == 1
-            implementation_address = contract_result["Implementation"]
-            implementation_name = ""
-
-            # Add contract to markdown data
-            self.contract_data_for_markdown.append(
-                {"name": contract_name, "address": address}
-            )
-
-            result = {}
-            target_storage_vars = []
-            temp_global = {}
-
-            # Setup RPC info
-            rpc_info = RpcInfo(self.rpc_url, "latest")
-
-            # Create etherscan-contracts directory for this contract
-            contract_dir = os.path.join(self.export_dir, contract_name)
-            os.makedirs(contract_dir, exist_ok=True)
-
-            # Handle proxy contracts
-            if is_proxy and implementation_address:
-                if not self.is_valid_eth_address(implementation_address):
-                    raise ValueError(
-                        f"Invalid implementation address for proxy: {implementation_address}"
-                    )
-
-                try:
-                    implementation_result = self.block_explorer.fetch_contract_metadata(
-                        implementation_address
-                    )
-                    implementation_name = implementation_result.get("ContractName", "")
-
-                    # Add implementation contract to markdown data
-                    if implementation_name:
-                        self.contract_data_for_markdown.append(
-                            {
-                                "name": implementation_name,
-                                "address": implementation_address,
-                            }
-                        )
-                except Exception as e:
-                    raise RuntimeError(f"Failed to get Implementation contract: {e}")
-
-            # Initialize Slither with export directory
-            try:
-                self.slither = Slither(
-                    f"{self.block_explorer.chain_name}:{address}",
-                    export_dir=contract_dir,
-                    etherscan_api_key=self.block_explorer.api_key,
-                )
-            except urllib.error.HTTPError as e:
-                logger.error(
-                    f"Failed to compile contract at {address} due to HTTP error: {e}"
-                )
-                raise
-            except Exception as e:
-                logger.error(f"An error occurred while analyzing {address}: {e}")
-                raise
-
-            # Get target contract
-            contracts = self.slither.contracts
-            target_contract = [c for c in contracts if c.name == contract_name]
-
-            if not target_contract:
-                raise ValueError(
-                    f"Contract name {contract_name} not found at address {address}"
-                )
-
-            # Initialize storage reader
-            self.storage_reader = SlitherReadStorage(target_contract, 10, rpc_info)
-            self.storage_reader.unstructured = False
-            address = address[address.find(":") + 1 :] if ":" in address else address
-            self.storage_reader.storage_address = address
-
-            # Handle proxy implementation
-            if is_proxy:
-                # Use the same directory for implementation contract
-                self.slither = Slither(
-                    f"{self.block_explorer.chain_name}:{implementation_address}",
-                    export_dir=contract_dir,
-                    etherscan_api_key=self.block_explorer.api_key,
-                )
-                implementation_contracts = self.slither.contracts_derived
-                target_contract.extend(
-                    [
-                        c
-                        for c in implementation_contracts
-                        if c.name == implementation_name
-                    ]
-                )
-
-                if len(target_contract) == 1:
-                    raise ValueError(
-                        f"Implementation name {implementation_name} not found"
-                    )
-
-                temp_global["Implementation_Address"] = implementation_address
-                temp_global["Proxy_Address"] = address
-            else:
-                temp_global["Address"] = address
-
-            # Analyze permissions
-            for i, contract in enumerate(target_contract):
-                self.get_permissions(
-                    contract, temp_global, target_storage_vars, is_proxy, i
-                )
-
-            target_storage_vars = list(set(target_storage_vars))
-
-            # Read storage
-            self._read_storage(
-                target_contract, target_storage_vars, temp_global, address
-            )
-
-            # Store results
-            if implementation_name:
-                self.scan_results[implementation_name] = temp_global
-            else:
-                self.scan_results[contract_name] = temp_global
-
-            logger.info(f"Completed scan for contract {contract_name}")
-            return temp_global
-
-        except Exception as e:
-            logger.error(
-                f"Unexpected error while scanning contract {address}: {str(e)}"
-            )
-            raise
-
-    def _read_storage(
-        self,
-        target_contract: List[Contract],
-        target_storage_vars: List[str],
-        temp_global: Dict[str, Any],
-        contract_address: str,
-    ) -> None:
-        """Read storage values for the contract.
-
-        Args:
-            target_contract (List[Contract]): List of contracts to analyze
-            target_storage_vars (List[str]): List of storage variables to read
-            temp_global (Dict[str, Any]): Dictionary to store results
-            contract_address (str): The contract address
-        """
-        # Set target variables
-        for contract in self.storage_reader._contracts:
+        # sets target variables
+        # adapted logic, extracted from method `get_all_storage_variables` of SlitherReadStorage class
+        for contract in storage_scanner._contracts:
             for var in contract.state_variables_ordered:
-                if var.name in target_storage_vars:
-                    self.storage_reader._target_variables.append((contract, var))
+                if var.name in self.target_storage_vars:
+                    # achieve step 1.
+                    storage_scanner._target_variables.append((contract, var))
 
+                # add all constant and immutable variable to a list to do the required look-up
                 if not var.is_stored:
-                    for function_data in temp_global["permissions"]["Functions"]:
-                        if var.name in function_data["state_variables_read"]:
-                            if "immutables_and_constants" not in function_data:
-                                function_data["immutables_and_constants"] = []
 
+                    # functionData is a dict
+                    for functionData in permissions_result["Functions"]:
+                        # check if e.g storage variable owner is part of this function
+                        if var.name in functionData["state_variables_read"]:
+                            # check if already added some constants/immutables
+
+                            # Ensure key exists
+                            if "immutables_and_constants" not in functionData:
+                                functionData["immutables_and_constants"] = []
+
+                            # Check if the variable has an expression and is not the proxy marker
                             if (
                                 var.expression
                                 and str(var.expression)
@@ -352,15 +276,15 @@ class ContractScanner:
                             ):
                                 try:
                                     raw_value = get_storage_data(
-                                        self.storage_reader.rpc_info.web3,
+                                        storage_scanner.rpc_info.web3,
                                         contract_address,
                                         str(var.expression),
-                                        self.storage_reader.rpc_info.block,
+                                        storage_scanner.rpc_info.block,
                                     )
-                                    value = self.storage_reader.convert_value_to_type(
+                                    value = storage_scanner.convert_value_to_type(
                                         raw_value, 160, 0, "address"
                                     )
-                                    function_data["immutables_and_constants"].append(
+                                    functionData["immutables_and_constants"].append(
                                         {
                                             "name": var.name,
                                             "slot": str(var.expression),
@@ -368,36 +292,172 @@ class ContractScanner:
                                         }
                                     )
                                 except Exception:
-                                    function_data["immutables_and_constants"].append(
+                                    functionData["immutables_and_constants"].append(
                                         {"name": var.name, "slot": str(var.expression)}
                                     )
                             else:
-                                function_data["immutables_and_constants"].append(
+                                functionData["immutables_and_constants"].append(
                                     {"name": var.name}
                                 )
 
-        # Compute storage keys and get values
-        self.storage_reader.get_target_variables()
+        # step 2. computes storage keys for target variables
+        storage_scanner.get_target_variables()
+
+        # step 3. get the values of the target variables and their slots
         try:
-            self.storage_reader.walk_slot_info(self.storage_reader.get_slot_values)
+            storage_scanner.walk_slot_info(storage_scanner.get_slot_values)
+        except urllib.error.HTTPError as e:
+            print(
+                f"\033[33mFailed to fetch storage from contract at {contract_address} due to HTTP error: {e}\033[0m"
+            )
         except Exception as e:
-            logger.error(f"Failed to read storage: {e}")
-            raise
+            print(
+                f"\033[33mAn error occurred while fetching storage slots from contract {contract_address}: {e}\033[0m"
+            )
 
-        # Store storage values
-        storage_values = {}
-        for key, value in self.storage_reader.slot_info.items():
-            contract_dict = temp_global["permissions"]
-            storage_values[value.name] = value.value
+        storageValues = {}
+        # merge storage retrieval with contracts
+        for key, value in storage_scanner.slot_info.items():
+            contractDict = permissions_result
+            storageValues[value.name] = value.value
+            # contractDict["Functions"] is a list, functionData a dict
+            for functionData in contractDict["Functions"]:
+                # check if e.g storage variable owner is part of this function
+                if value.name in functionData["state_variables_read"]:
+                    # if so, add a key value pair to the functionData object, to improve readability of report
+                    functionData[value.name] = value.value
 
-            for function_data in contract_dict["Functions"]:
-                if value.name in function_data["state_variables_read"]:
-                    function_data[value.name] = value.value
+        return storageValues
 
-        if storage_values:
-            contract_dict["storage_values"] = storage_values
+    def _check_proxy(self, contract_metadata: Dict[str, Any]):
+        """Handle proxy contract logic.
 
-    def generate_reports(self, project_name: str) -> None:
+        Args:
+            contract_metadata (Dict[str, Any]): Metadata of the contract
+
+        Returns:
+            tuple: (isProxy, implementation_address)
+        """
+        isProxy = contract_metadata["Proxy"] == 1
+        implementation_address = contract_metadata["Implementation"]
+        implementation_name = None
+
+        if isProxy and implementation_address:
+            if not isinstance(
+                implementation_address, str
+            ) or not self._is_valid_eth_address(implementation_address):
+                raise ValueError(
+                    f"Invalid implementation address for proxy: {implementation_address}"
+                )
+            try:
+                implementation_result = self.block_explorer.get_contract_metadata(
+                    implementation_address
+                )
+                implementation_name = implementation_result.get("ContractName", None)
+                self.implementation_name = implementation_name
+                self.contract_data_for_markdown.append(
+                    {"name": implementation_name, "address": implementation_address}
+                )
+            except Exception as e:
+                raise f"Failed to get Implementation contract from Etherscan. \n\n\n  + {e}"
+
+    def scan(self) -> Dict[str, Any]:
+        """Scan a contract for permissions and storage.
+
+        Args:
+            contract_address (str): The contract address to scan
+
+        Returns:
+            Dict[str, Any]: The scan results containing permissions and storage analysis
+        """
+        final_scan_result = {}
+        contract_metadata, main_contract_path = self._get_contract(self.address)
+        contract_name = contract_metadata["ContractName"]
+        isProxy = contract_metadata["Proxy"] == 1
+
+        self.contract_name = contract_name
+        self.contract_data_for_markdown.append(
+            {"name": contract_name, "address": self.address}
+        )
+        self._check_proxy(contract_metadata)
+
+        # Initialize scan_result structure
+        self.scan_result[contract_name] = {}
+
+        # Extract and switch to the correct Solidity version
+        solidity_version = self._extract_solidity_version(main_contract_path)
+        self._switch_solidity_version(solidity_version)
+
+        slither = Slither(main_contract_path)
+
+        # Get target contract from slither
+        target_contract = [c for c in slither.contracts if c.name == contract_name]
+        if not target_contract:
+            raise ValueError(f"Contract {contract_name} not found in source code")
+
+        # Initialize storage scanner
+        rpc_info = RpcInfo(self.rpc_url, "latest")
+        srs = SlitherReadStorage(target_contract, max_depth=5, rpc_info=rpc_info)
+        srs.unstructured = False
+        srs.storage_address = self.address
+
+        # If proxy, scan implementation
+        if isProxy:
+            impl_address = contract_metadata["Implementation"]
+            _, impl_path = self._get_contract(impl_address)
+
+            # Extract and switch to implementation contract's Solidity version
+            impl_solidity_version = self._extract_solidity_version(impl_path)
+            self._switch_solidity_version(impl_solidity_version)
+
+            impl_slither = Slither(impl_path)
+
+            # Get implementation contract
+            impl_contracts = impl_slither.contracts_derived
+
+            # find the instantiated/main implementation contract
+            target_contract.extend(
+                [
+                    contract
+                    for contract in impl_contracts
+                    if contract.name == self.implementation_name
+                ]
+            )
+            if len(target_contract) == 1:
+                raise Exception(
+                    f"\033[31m\n \nThe implementation name supplied in contract.json does not match any of the found implementation contract names for this address: {self.address}\033[0m"
+                )
+            self.scan_result["Implementation_Address"] = impl_address
+            self.scan_result["Proxy_Address"] = self.address
+        if not isProxy:
+            self.scan_result["Address"] = self.address
+
+        for i, contract in enumerate(target_contract):
+            # get permissions and store inside target_storage_vars
+            _scan_permissions_result = self._scan_permissions(contract)
+            if isProxy and i == 0:
+                self.scan_result["proxy_permissions"] = _scan_permissions_result
+            else:
+                self.scan_result["permissions"] = _scan_permissions_result
+
+        self.target_storage_vars = list(
+            set(self.target_storage_vars)
+        )  # remove duplicates
+
+        # Scan storage
+        permissions_result = self.scan_result["permissions"]
+        storage_result = self._scan_storage(srs, permissions_result, self.address)
+        if len(storage_result.values()):
+            self.scan_result["storage_values"] = storage_result
+
+        if self.implementation_name:
+            final_scan_result[self.implementation_name] = self.scan_result
+        else:
+            final_scan_result[self.contract_name] = self.scan_result
+
+        return final_scan_result, self.contract_data_for_markdown
+
+    def generate_reports(self) -> None:
         """Generate JSON and markdown reports from scan results.
 
         Args:
@@ -408,24 +468,20 @@ class ContractScanner:
         os.makedirs(reports_dir, exist_ok=True)
 
         # Save JSON report
-        json_path = os.path.join(reports_dir, f"permissions_{project_name}.json")
+        json_path = os.path.join(reports_dir, "permissions.json")
+        final_result = {}
+        if self.implementation_name:
+            final_result[self.implementation_name] = self.scan_result
+        else:
+            final_result[self.contract_name] = self.scan_result
+
         with open(json_path, "w") as f:
-            json.dump(self.scan_results, f, indent=4)
-        logger.info(f"Generated JSON report: {json_path}")
+            json.dump(final_result, f, indent=4)
 
         # Generate and save markdown report
         markdown_content = generate_full_markdown(
-            project_name, self.contract_data_for_markdown, self.scan_results
+            self.contract_name, self.contract_data_for_markdown, final_result
         )
-        markdown_path = os.path.join(reports_dir, f"permissions_{project_name}.md")
+        markdown_path = os.path.join(reports_dir, f"markdown.md")
         with open(markdown_path, "w") as f:
             f.write(markdown_content)
-        logger.info(f"Generated Markdown report: {markdown_path}")
-
-    def get_scan_results(self) -> Dict[str, Any]:
-        """Get the current scan results.
-
-        Returns:
-            Dict[str, Any]: The accumulated scan results
-        """
-        return self.scan_results

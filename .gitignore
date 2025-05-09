@@ -5,10 +5,11 @@ src/__pycache__
 
 /contracts.json
 /permissions.json
-/results
+/results/
 # markdown generation outputs
 *.md
 
 .venv
 logs
 .cursor
+temp/
