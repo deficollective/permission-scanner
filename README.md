@@ -26,6 +26,14 @@ Create and activate a virtual Python environment, and install the required Pytho
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+pip install -e . # to install the this repo as a package name permission_scanner
+```
+
+Or use uv
+
+```shell
+uv venv
+uv pip install -r requirements.txt
 ```
 
 Copy the `.env.example` file to `.env` and, depending on the network where the contracts are deployed on, fill in your RPC provider's url and a valid block explorer api key. Then load the variables with
@@ -49,7 +57,13 @@ source .env
 Then execute the scanner script with 🚀
 
 ```shell
-python src/main.py
+python example/run_scanner.py
+```
+
+Or use uv
+
+```shell
+uv run example/run_scanner.py
 ```
 
 ### Results
