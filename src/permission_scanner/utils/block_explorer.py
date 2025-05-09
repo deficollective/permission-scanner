@@ -113,8 +113,8 @@ class BlockExplorer:
             "ContractName": all_data.get("ContractName"),
             "Proxy": all_data.get("Proxy") == "1",
             "Implementation": all_data.get("Implementation"),
-            "CompilerVersion": all_data.get("CompilerVersion"),
-            "Library": all_data.get("Library"),
+            # "CompilerVersion": all_data.get("CompilerVersion"),
+            # "Library": all_data.get("Library"),
         }
         return metadata
 

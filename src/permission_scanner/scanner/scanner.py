@@ -1,11 +1,6 @@
-import json
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Dict, Any, Tuple
 import urllib.error
-import os
 import re
-from enum import Enum
-from dataclasses import dataclass
-import subprocess
 
 from slither import Slither
 from slither.core.declarations.function import Function
@@ -17,7 +12,6 @@ from slither.tools.read_storage.read_storage import (
 )
 
 from ..utils.block_explorer import BlockExplorer
-from ..utils.markdown_generator import generate_full_markdown
 
 
 class ContractScanner:
@@ -25,10 +19,11 @@ class ContractScanner:
 
     def __init__(
         self,
-        # block_explorer: BlockExplorer,
+        chain_name: str,
+        project_name: str,
+        address: str,
         block_explorer_api_key: str,
         rpc_url: str,
-        address: str,
         export_dir: str = "results",
     ):
         """Initialize the ContractScanner.
@@ -38,16 +33,20 @@ class ContractScanner:
             block_explorer (BlockExplorer): The block explorer instance for fetching contract metadata
             export_dir (str): Directory to save Solidity files and crytic_compile.config.json
         """
-        # self.block_explorer = block_explorer
+        self.project_name = project_name
+        self.address = address
+        self.chain_name = chain_name
         self.block_explorer_api_key = block_explorer_api_key
         self.rpc_url = rpc_url
-        self.address = address
         self.export_dir = export_dir
         self.permissions_results = {}
         self.target_storage_vars = []
         self.contract_data_for_markdown = []
         self.scan_result = {}
         self.implementation_name = None
+        self.block_explorer = BlockExplorer(
+            api_key=self.block_explorer_api_key, chain_name=chain_name
+        )
 
     @staticmethod
     def _is_valid_eth_address(address: str) -> bool:
@@ -92,71 +91,6 @@ class ContractScanner:
             if "msg.sender" in [v.name for v in n.solidity_variables_read]
         ]
         return all_conditional_nodes_on_msg_sender
-
-    def _extract_solidity_version(
-        self, contract_path: str, default_version: str = "0.7.6"
-    ) -> str:
-        """Extract Solidity version from contract's pragma statement.
-
-        Args:
-            contract_path (str): Path to the contract file
-
-        Returns:
-            str: Solidity version (e.g. "0.4.24")
-        """
-        try:
-            with open(contract_path, "r") as f:
-                content = f.read()
-                # Match pragma solidity statements like:
-                # pragma solidity ^0.4.24;
-                # pragma solidity 0.4.24;
-                # pragma solidity >=0.4.24 <0.5.0;
-                match = re.search(
-                    r"pragma\s+solidity\s+(\^?[0-9]+\.[0-9]+\.[0-9]+)", content
-                )
-                if match:
-                    return match.group(1).replace("^", "")
-                return default_version  # Default version if not found
-        except Exception as e:
-            return default_version  # Default version on error
-
-    def _switch_solidity_version(self, version: str) -> None:
-        """Switch to the specified Solidity version using solc-select.
-
-        Args:
-            version (str): Solidity version to switch to
-        """
-        try:
-            current_version_info = subprocess.run(
-                ["solc", "--version"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,
-            )
-            if version in current_version_info.stdout:
-                return
-            subprocess.run(["solc-select", "use", version], check=True)
-        except subprocess.CalledProcessError as e:
-            raise f"Failed to switch Solidity version to {version}: {e}"
-
-    def _get_contract(self, address: str) -> Contract:
-        """Get a contract from the block explorer and initialize Slither.
-
-        Args:
-            address (str): The contract address to fetch
-
-        Returns:
-            tuple: (contract_metadata, main_contract_path)
-        """
-        contract_metadata = self.block_explorer.get_contract_metadata(address)
-        # contract_save_dir = os.path.join(
-        #     self.export_dir, contract_metadata["ContractName"]
-        # )
-        # os.makedirs(contract_save_dir, exist_ok=True)
-        main_contract_path = self.block_explorer.save_sourcecode(
-            address, self.export_dir
-        )
-        return contract_metadata, main_contract_path
 
     def _scan_permissions(self, contract: Contract) -> Dict[str, Any]:
         """Analyze permissions in a contract and store results.
@@ -361,7 +295,7 @@ class ContractScanner:
             except Exception as e:
                 raise f"Failed to get Implementation contract from Etherscan. \n\n\n  + {e}"
 
-    def scan(self) -> Dict[str, Any]:
+    def scan(self) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
         """Scan a contract for permissions and storage.
 
         Args:
@@ -371,7 +305,7 @@ class ContractScanner:
             Dict[str, Any]: The scan results containing permissions and storage analysis
         """
         final_scan_result = {}
-        contract_metadata, main_contract_path = self._get_contract(self.address)
+        contract_metadata = self.block_explorer.get_contract_metadata(self.address)
         contract_name = contract_metadata["ContractName"]
         isProxy = contract_metadata["Proxy"] == 1
 
@@ -384,11 +318,10 @@ class ContractScanner:
         # Initialize scan_result structure
         self.scan_result[contract_name] = {}
 
-        # Extract and switch to the correct Solidity version
-        solidity_version = self._extract_solidity_version(main_contract_path)
-        self._switch_solidity_version(solidity_version)
-
-        slither = Slither(main_contract_path)
+        slither = Slither(
+            f"{self.chain_name}:{self.address}",
+            export_dir=f"{self.export_dir}/{self.project_name}-contracts/{contract_name}",
+        )
 
         # Get target contract from slither
         target_contract = [c for c in slither.contracts if c.name == contract_name]
@@ -404,14 +337,10 @@ class ContractScanner:
         # If proxy, scan implementation
         if isProxy:
             impl_address = contract_metadata["Implementation"]
-            _, impl_path = self._get_contract(impl_address)
-
-            # Extract and switch to implementation contract's Solidity version
-            impl_solidity_version = self._extract_solidity_version(impl_path)
-            self._switch_solidity_version(impl_solidity_version)
-
-            impl_slither = Slither(impl_path)
-
+            impl_slither = Slither(
+                f"{self.chain_name}:{impl_address}",
+                export_dir=f"{self.export_dir}/{self.project_name}-contracts/{self.implementation_name}",
+            )
             # Get implementation contract
             impl_contracts = impl_slither.contracts_derived
 
@@ -456,32 +385,3 @@ class ContractScanner:
             final_scan_result[self.contract_name] = self.scan_result
 
         return final_scan_result, self.contract_data_for_markdown
-
-    def generate_reports(self) -> None:
-        """Generate JSON and markdown reports from scan results.
-
-        Args:
-            project_name (str): Name of the project being scanned
-        """
-        # Create reports directory
-        reports_dir = os.path.join(self.export_dir, "reports")
-        os.makedirs(reports_dir, exist_ok=True)
-
-        # Save JSON report
-        json_path = os.path.join(reports_dir, "permissions.json")
-        final_result = {}
-        if self.implementation_name:
-            final_result[self.implementation_name] = self.scan_result
-        else:
-            final_result[self.contract_name] = self.scan_result
-
-        with open(json_path, "w") as f:
-            json.dump(final_result, f, indent=4)
-
-        # Generate and save markdown report
-        markdown_content = generate_full_markdown(
-            self.contract_name, self.contract_data_for_markdown, final_result
-        )
-        markdown_path = os.path.join(reports_dir, f"markdown.md")
-        with open(markdown_path, "w") as f:
-            f.write(markdown_content)

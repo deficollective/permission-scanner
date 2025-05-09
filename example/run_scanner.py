@@ -2,7 +2,7 @@ import os
 import json
 import logging
 from dotenv import load_dotenv
-from permission_scanner import ContractScanner, BlockExplorer
+from permission_scanner import ContractScanner
 from permission_scanner.utils.markdown_generator import generate_full_markdown
 
 
@@ -35,23 +35,19 @@ def main():
         load_dotenv()
 
         # Load contracts from json
-        config_json = load_config_from_file("example/contracts.json")
+        config_json = load_config_from_file("example/contracts_full.json")
         contracts_addresses = config_json["Contracts"]
         project_name = config_json["Project_Name"]
         chain_name = config_json["Chain_Name"]
 
         # Setup environment variables
-        api_key = os.getenv("ETHERSCAN_API_KEY")
+        block_explorer_api_key = os.getenv("ETHERSCAN_API_KEY")
         rpc_url = os.getenv("RPC_URL")
 
-        if not api_key or not rpc_url:
+        if not block_explorer_api_key or not rpc_url:
             raise ValueError("Missing required environment variables")
 
-        # Initiate the BlockExplorer object
-        block_explorer = BlockExplorer(api_key, chain_name)
-
-        # Initialize scanner
-        export_dir = f"results/{project_name}"
+        export_dir = f"results"
 
         # Scan each contract
         all_scan_results = {}
@@ -60,20 +56,24 @@ def main():
         for address in contracts_addresses:
             # initiate scanner for each address
             scanner = ContractScanner(
-                block_explorer=block_explorer,
+                project_name=project_name,
+                address=address,
+                chain_name=chain_name,
+                block_explorer_api_key=block_explorer_api_key,
                 rpc_url=rpc_url,
                 export_dir=export_dir,
-                address=address,
             )
             final_result, contract_data_for_markdown = scanner.scan()
             all_scan_results.update(final_result)
             all_contract_data_for_markdown += contract_data_for_markdown
 
-        json_path = os.path.join(export_dir, "permissions.json")
+        report_dir = f"{export_dir}/{project_name}-reports"
+        os.makedirs(report_dir, exist_ok=True)
+        json_path = os.path.join(report_dir, "permissions.json")
+        markdown_path = os.path.join(report_dir, "markdown.md")
+
         with open(json_path, "w") as f:
             json.dump(all_scan_results, f, indent=4)
-
-        markdown_path = os.path.join(export_dir, "markdown.md")
         markdown_content = generate_full_markdown(
             project_name, all_contract_data_for_markdown, all_scan_results
         )
