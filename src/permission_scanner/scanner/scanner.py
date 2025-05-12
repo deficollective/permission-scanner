@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Tuple
 import urllib.error
 import re
-
+import json
 from slither import Slither
 from slither.core.declarations.function import Function
 from slither.core.declarations.contract import Contract
@@ -306,6 +306,11 @@ class ContractScanner:
         """
         final_scan_result = {}
         contract_metadata = self.block_explorer.get_contract_metadata(self.address)
+        with open(
+            f"{self.export_dir}/{self.project_name}-contracts/contract_metadata.json",
+            "w",
+        ) as f:
+            json.dump(contract_metadata, f)
         contract_name = contract_metadata["ContractName"]
         isProxy = contract_metadata["Proxy"] == 1
 
@@ -321,6 +326,7 @@ class ContractScanner:
         slither = Slither(
             f"{self.chain_name}:{self.address}",
             export_dir=f"{self.export_dir}/{self.project_name}-contracts/{contract_name}",
+            allow_path=f"{self.export_dir}/{self.project_name}-contracts",
         )
 
         # Get target contract from slither
@@ -340,6 +346,7 @@ class ContractScanner:
             impl_slither = Slither(
                 f"{self.chain_name}:{impl_address}",
                 export_dir=f"{self.export_dir}/{self.project_name}-contracts/{self.implementation_name}",
+                allow_path=f"{self.export_dir}/{self.project_name}-contracts",
             )
             # Get implementation contract
             impl_contracts = impl_slither.contracts_derived

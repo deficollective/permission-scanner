@@ -35,19 +35,19 @@ def main():
         load_dotenv()
 
         # Load contracts from json
-        config_json = load_config_from_file("example/contracts_full.json")
+        config_json = load_config_from_file("temp/contracts_kodiak_error.json")
         contracts_addresses = config_json["Contracts"]
         project_name = config_json["Project_Name"]
         chain_name = config_json["Chain_Name"]
 
         # Setup environment variables
-        block_explorer_api_key = os.getenv("ETHERSCAN_API_KEY")
+        block_explorer_api_key = os.getenv("BERASCAN_API_KEY")
         rpc_url = os.getenv("RPC_URL")
 
         if not block_explorer_api_key or not rpc_url:
             raise ValueError("Missing required environment variables")
 
-        export_dir = f"results"
+        export_dir = f"temp/kodiak_error"
 
         # Scan each contract
         all_scan_results = {}

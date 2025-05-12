@@ -13,3 +13,4 @@ results/
 logs
 .cursor
 temp/
+.DS_Store
