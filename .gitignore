@@ -1,11 +1,47 @@
-/venv
-.env
-src/__pycache__
-/crytic-export
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
+# Virtual Environment
+venv/
+.venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.cursor/
+
+# Environment variables
+.env
+
+# Project specific
+/crytic-export
 /contracts.json
 /permissions.json
-/results
-# markdown generation outputs
+results/
 *.md
-*.json
+logs/
+temp/
+.DS_Store
