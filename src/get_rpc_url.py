@@ -29,6 +29,7 @@ def get_rpc_url(network: str) -> str:
         "wemix": os.getenv("WEMIX_RPC"),
         "era.zksync": os.getenv("ZKSYNC_ERA_RPC"),
         "xai": os.getenv("XAI_RPC"),
+        "berachain": os.getenv("BERACHAIN_RPC")
     }
     
     rpc_url = rpc_urls.get(network)
@@ -68,6 +69,7 @@ def get_chain_id(network: str) -> int:
         "wemix": 1111,
         "era.zksync": 324,
         "xai": 660279,
+        "berachain" :80094
     }
 
     if network not in chain_ids:
