@@ -7,7 +7,7 @@ cbor2==5.6.4
 certifi==2024.8.30
 charset-normalizer==3.3.2
 ckzg==1.0.2
-crytic-compile==0.3.8
+crytic-compile==0.3.10
 cytoolz==0.12.3
 eth-account==0.11.3
 eth-hash==0.7.0
