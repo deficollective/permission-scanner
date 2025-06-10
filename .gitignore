@@ -9,3 +9,5 @@ src/__pycache__
 # markdown generation outputs
 *.md
 *.json
+
+/ccipscript.py
